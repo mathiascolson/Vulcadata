@@ -228,3 +228,5 @@ configs/*.local.yml
 configs/*.local.json
 
 src/retraining/backups/
+# Hugging Face Spaces local clones
+infra/huggingface_spaces/
