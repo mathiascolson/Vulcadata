@@ -1,0 +1,21 @@
+model_decision_path: configs/final_model_decision.json
+
+input:
+  seq_len: 120
+  expected_n_features: 992
+  feature_window_minutes: 10
+  inference_window_hours: 24
+
+classification:
+  n_classes: 6
+  min_class_alert: 3
+  alert_threshold_24h: 0.35
+
+outputs:
+  write_batch_outputs: true
+  update_latest_outputs: true
+  update_history: true
+  predictions_filename: predictions.parquet
+  batch_summary_filename: batch_summary.json
+  station_coverage_filename: station_coverage.json
+  model_info_filename: model_info.json

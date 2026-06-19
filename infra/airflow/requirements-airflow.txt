@@ -1,0 +1,16 @@
+boto3==1.36.3
+botocore==1.36.3
+cloudpickle==2.2.1
+evidently==0.4.36
+joblib==1.5.3
+mlflow==3.2.0
+numpy==1.26.4
+pandas==2.1.4
+pydantic==2.10.6
+python-dotenv==1.0.1
+PyYAML==6.0.2
+requests==2.32.3
+scikit-learn==1.9.0
+scipy==1.17.1
+torch==2.12.1
+great_expectations==1.18.1   

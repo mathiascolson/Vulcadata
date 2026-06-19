@@ -1,0 +1,17 @@
+reference:
+  reference_dataset_s3_key: volcano/monitoring/reference/reference_features.parquet
+
+current:
+  feature_snapshot_filename: feature_snapshot.parquet
+  evidently_light_metrics_filename: evidently_light_metrics.json
+
+evidently:
+  run_light_metrics_each_batch: true
+  run_full_report_daily: true
+  full_report_hour_utc: 6
+  reports_prefix: volcano/reports/evidently
+  monitoring_history_s3_key: volcano/monitoring/monitoring_history.parquet
+
+thresholds:
+  max_drifted_feature_share: 0.30
+  max_prediction_drift_score: 0.30

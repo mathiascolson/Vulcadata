@@ -1,0 +1,20 @@
+task_type: classification
+
+dataset:
+  seq_len: 120
+  expected_n_features: 992
+  n_classes: 6
+  min_class_alert: 3
+
+training:
+  batch_size: 64
+  max_epochs: 30
+  early_stopping_patience: 8
+  random_seed: 42
+
+promotion_rules:
+  require_gx_passed: true
+  min_recall_alert_24h: 0.70
+  min_precision_alert_24h: 0.30
+  max_macro_f1_drop: 0.02
+  min_precision_gain: 0.01

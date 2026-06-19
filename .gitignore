@@ -1,0 +1,230 @@
+# =========================
+# Vulcadata - Git ignore
+# =========================
+
+
+# -------------------------
+# Environment / secrets
+# -------------------------
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.token
+*.secret
+secrets/
+credentials/
+.aws/
+.gcp/
+.azure/
+
+
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+
+# -------------------------
+# Virtual environments
+# -------------------------
+.venv/
+venv/
+env/
+ENV/
+conda-env/
+pytorch_env/
+mlflow_env/
+airflow_env/
+
+
+# -------------------------
+# Jupyter
+# -------------------------
+.ipynb_checkpoints/
+
+
+# -------------------------
+# OS / IDE
+# -------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# -------------------------
+# Local data
+# Keep only small metadata and optional documented examples
+# -------------------------
+data/**
+!data/
+!data/.gitkeep
+!data/README.md
+!data/metadata/
+!data/metadata/**
+!data/examples/
+!data/examples/**
+
+*.mseed
+*.miniseed
+*.npz
+*.npy
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.csv.gz
+*.jsonl
+*.jsonl.gz
+
+
+# -------------------------
+# Runtime preprocessing / inference / retraining files
+# -------------------------
+data/extraction/
+data/preprocessing/
+data/retraining/
+
+
+# -------------------------
+# Models / checkpoints / ML artifacts
+# -------------------------
+models/**
+!models/
+!models/.gitkeep
+!models/README.md
+
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.joblib
+*.pkl
+*.pickle
+
+mlruns/
+mlartifacts/
+outputs/
+artifacts/
+
+
+# -------------------------
+# Runtime reports
+# Keep only optional documentation files
+# -------------------------
+reports/**
+!reports/
+!reports/.gitkeep
+!reports/README.md
+
+reports_project_inventory.csv
+
+
+# -------------------------
+# Great Expectations
+# Keep expectations, ignore generated/runtime assets
+# -------------------------
+great_expectations/uncommitted/
+great_expectations/validations/
+great_expectations/checkpoints/*checkpoint_result*
+great_expectations/data_docs/
+great_expectations/profilers/
+
+
+# -------------------------
+# Evidently
+# -------------------------
+evidently_reports/
+evidently_workspace/
+reports/**/evidently/
+reports/**/*.html
+
+
+# -------------------------
+# Airflow runtime
+# -------------------------
+infra/airflow/logs/
+infra/airflow/dags_backups/
+infra/airflow/plugins/__pycache__/
+airflow.db
+airflow-webserver.pid
+
+
+# -------------------------
+# Docker runtime / local volumes
+# -------------------------
+docker/volumes/
+volumes/
+postgres_data/
+redis_data/
+*.log
+
+
+# -------------------------
+# Hugging Face Space repositories cloned locally
+# -------------------------
+infra/huggingface_spaces/mlflow/
+infra/huggingface_spaces/*/.git/
+
+
+# -------------------------
+# Temporary / backup files
+# -------------------------
+tmp/
+temp/
+.cache/
+*.tmp
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
+*~
+*.before_*
+*.after_*
+*_backup.*
+*_before_*.py
+*_updated.py
+*_Vfinetuning_backup.py
+
+
+# -------------------------
+# Temporary model decision exports / archives
+# -------------------------
+configs/final_model_decision_exported.json
+configs/final_model_decision.before_export_backup.json
+configs/final_model_decision.before_pytorch_checkpoint.json
+configs/model_decision_archive/
+
+
+# -------------------------
+# Local runtime config variants
+# -------------------------
+configs/local/
+configs/*.local.yaml
+configs/*.local.yml
+configs/*.local.json
+
+src/retraining/backups/

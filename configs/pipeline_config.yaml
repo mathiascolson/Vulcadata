@@ -1,0 +1,23 @@
+project_name: vulcadata
+timezone: UTC
+
+paths:
+  project_root: .
+  local_data_dir: data
+  local_reports_dir: reports
+  local_models_dir: models
+
+storage:
+  s3_bucket: vulcadata
+  raw_prefix: volcano/raw_mseed
+  extraction_prefix: volcano/extraction
+  processed_prefix: volcano/preprocessing/processed
+  inference_prefix: volcano/inference
+  reports_prefix: volcano/reports
+  monitoring_prefix: volcano/monitoring
+  model_decisions_prefix: volcano/model_decisions
+
+mlflow:
+  tracking_uri: https://vartkirl-vulcadata-mlflow.hf.space/
+  experiment_name: Vulcadata
+  registered_model_name: vulcadata_alert_model
