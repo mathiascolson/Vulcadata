@@ -14,9 +14,9 @@ PROJECT_ROOT = os.getenv("VULCADATA_PROJECT_ROOT", "/opt/vulcadata")
 
 SOURCE_NPZ = os.getenv(
     "VULCADATA_SOURCE_NPZ",
-    "data/preprocessing/processed_full_stride5_with_quiet/volcano_multi.npz",
+    "data/preprocessing/processed/inference_source.npz",
 )
-SOURCE_ARRAY_KEY = os.getenv("VULCADATA_SOURCE_ARRAY_KEY", "X_test")
+SOURCE_ARRAY_KEY = os.getenv("VULCADATA_SOURCE_ARRAY_KEY", "X")
 
 LATEST_BATCH_NPZ = os.getenv(
     "VULCADATA_LATEST_BATCH_NPZ",
@@ -43,7 +43,7 @@ GX_VALIDATION_OUTPUT_JSON = os.getenv(
 
 EVIDENTLY_REFERENCE_NPZ = os.getenv(
     "VULCADATA_EVIDENTLY_REFERENCE_NPZ",
-    "data/preprocessing/processed_full_stride5_with_quiet/volcano_multi.npz",
+    "data/preprocessing/processed/volcano_multi.npz",
 )
 EVIDENTLY_REFERENCE_ARRAY_KEY = os.getenv(
     "VULCADATA_EVIDENTLY_REFERENCE_ARRAY_KEY",

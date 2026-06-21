@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="diapo-4---exploration-et-choix-final" name="Diapo 4 - Exploration et choix final">
+    <mxGraphModel dx="1664" dy="853" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="d4_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontColor=#1F2937;fontStyle=1;" value="Exploration des modèles et choix final" vertex="1">
+          <mxGeometry height="42" width="780" x="250" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_sub" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontColor=#4B5563;" value="Trois familles testées, deux formulations comparées, un modèle retenu pour le dashboard" vertex="1">
+          <mxGeometry height="30" width="820" x="230" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF2FF;strokeColor=#4F81BD;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Données sismiques&lt;br&gt;&lt;b&gt;MiniSEED&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;stations + canaux&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="175" x="55" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_pre" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF2FF;strokeColor=#4F81BD;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Prétraitement&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;filtrage, nettoyage,&lt;br&gt;agrégation 1 min&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="185" x="290" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_feat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF7EA;strokeColor=#5B9A68;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Features sismiques&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;énergie, Frequency Index,&lt;br&gt;entropie, kurtosis&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="215" x="520" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_seq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF7EA;strokeColor=#5B9A68;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Séquences temporelles&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;fenêtres glissantes&lt;br&gt;train / validation / test&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="785" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_exp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFF3E0;strokeColor=#D9903D;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Expérimentations&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;régression + classification&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="170" x="1060" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e0" edge="1" parent="1" source="d4_data" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d4_pre">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e1" edge="1" parent="1" source="d4_pre" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d4_feat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e2" edge="1" parent="1" source="d4_feat" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d4_seq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e3" edge="1" parent="1" source="d4_seq" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d4_exp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_midtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontColor=#374151;fontStyle=1;" value="Familles de modèles testées" vertex="1">
+          <mxGeometry height="30" width="560" x="360" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_m1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F2EAFE;strokeColor=#7E57C2;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;CNN-BiLSTM&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;motifs locaux + mémoire temporelle&lt;br&gt;testé en régression et classification&lt;/span&gt;" vertex="1">
+          <mxGeometry height="105" width="285" x="120" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_m2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F2EAFE;strokeColor=#7E57C2;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;Transformer&lt;/b&gt;&lt;br&gt;&lt;div&gt;&lt;span style=&quot;font-size:12px&quot;&gt;attention temporelle&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size:12px&quot;&gt;&lt;span style=&quot;font-size:12px&quot;&gt;testé en régression et classification&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="105" width="285" x="500" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_m3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F2EAFE;strokeColor=#7E57C2;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;CNN-Transformer&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;motifs locaux + attention&lt;br&gt;testé en régression et classification&lt;/span&gt;" vertex="1">
+          <mxGeometry height="105" width="285" x="880" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e4" edge="1" parent="1" source="d4_exp" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7E57C2;" target="d4_m1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1145" y="330" />
+              <mxPoint x="260" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d4_e5" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7E57C2;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1146.6" y="330" />
+              <mxPoint x="643.6" y="330" />
+            </Array>
+            <mxPoint x="1146.6" y="280" as="sourcePoint" />
+            <mxPoint x="643.4090909090911" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d4_e6" edge="1" parent="1" source="d4_exp" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7E57C2;" target="d4_m3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1145" y="330" />
+              <mxPoint x="1022" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d4_short1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#1F2937;spacing=8;" value="Meilleur candidat régression&lt;br&gt;&lt;b&gt;CNN-BiLSTM&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;horizon avant éruption&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="237.5" x="142.5" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_final" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=14;fontColor=#1F2937;spacing=8;" value="Modèle final&lt;br&gt;&lt;b&gt;CNN-Transformer classification&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;probabilité d’alerte 24 h&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="247.5" x="898.75" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_badge" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#166534;spacing=6;" value="MODÈLE RETENU" vertex="1">
+          <mxGeometry height="32" width="160" x="845" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e7" edge="1" parent="1" source="d4_m1" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#999999;dashed=1;dashPattern=6 4;" target="d4_short1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_e8" edge="1" parent="1" source="d4_m3" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#16A34A;" target="d4_final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4_note" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#374151;" value="&lt;div&gt;Arbitrage :&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Conserver une sortie exploitable métier et la meilleure qualité observée sur le volume de données disponible.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="390" x="445" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="2VpwSQtFMpsgeO8HiWoL-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#374151;spacing=8;" value="&lt;b&gt;Idée clé : apprendre une dynamique pré-éruptive à partir de séquences, pas d’une mesure isolée.&lt;/b&gt;" vertex="1">
+          <mxGeometry height="55" width="800" x="240" y="110" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

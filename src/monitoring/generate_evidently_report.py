@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 
-DEFAULT_REFERENCE_NPZ = Path("data/preprocessing/processed_full_stride5_with_quiet/volcano_multi.npz")
+DEFAULT_REFERENCE_NPZ = Path("data/preprocessing/processed/volcano_multi.npz")
 DEFAULT_CURRENT_NPZ = Path("data/preprocessing/processed/latest_batch.npz")
 DEFAULT_REFERENCE_ARRAY_KEY = "X_train"
 DEFAULT_CURRENT_ARRAY_KEY = "X"

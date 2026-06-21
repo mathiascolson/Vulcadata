@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="d6" name="Diapo 6 - CNN-Transformer classification">
+    <mxGraphModel dx="1414" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="d6_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontStyle=1;fontColor=#1F2937;" value="Modèle retenu : CNN-Transformer en classification" vertex="1">
+          <mxGeometry height="45" width="940" x="95" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_sub" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontColor=#4B5563;" value="Produire un niveau d’alerte exploitable malgré un volume d’entraînement limité" vertex="1">
+          <mxGeometry height="30" width="840" x="142.5" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF7EA;strokeColor=#5B9A68;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Séquences temporelles&lt;br&gt;&lt;b&gt;features sismiques&lt;/b&gt;" vertex="1">
+          <mxGeometry height="95" width="190" x="65" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF2FF;strokeColor=#4F81BD;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="CNN&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;motifs locaux&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="115" x="315" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F2EAFE;strokeColor=#7E57C2;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Transformer&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;attention temporelle&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="150" x="490" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFF3E0;strokeColor=#D9903D;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Classification&lt;br&gt;&lt;b&gt;6 classes&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;niveaux d’alerte&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="140" x="700" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F5F5F5;strokeColor=#8A8A8A;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Indicateur final&lt;br&gt;&lt;b&gt;P(alerte 24 h)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="95" width="170" x="900" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_ar0" edge="1" parent="1" source="d6_a" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d6_b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_ar1" edge="1" parent="1" source="d6_b" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d6_c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_ar2" edge="1" parent="1" source="d6_c" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d6_d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_ar3" edge="1" parent="1" source="d6_d" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d6_e">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_kpi1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#374151;spacing=8;" value="&lt;div&gt;Pourquoi le CNN ?&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;span style=&quot;font-size:12px&quot;&gt;il extrait des structures locales dans les features sismiques&lt;/span&gt;" vertex="1">
+          <mxGeometry height="85" width="175" x="280" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_kpi2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#374151;spacing=8;" value="&lt;div&gt;Pourquoi le Transformer ?&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;span style=&quot;font-size:12px&quot;&gt;il pondère les moments importants de la séquence&lt;/span&gt;" vertex="1">
+          <mxGeometry height="85" width="185" x="470" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_kpi3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#374151;spacing=8;" value="Pourquoi ce choix final ?&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;meilleure qualité de prédiction observée et sortie métier lisible&lt;/span&gt;" vertex="1">
+          <mxGeometry height="85" width="290" x="740" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="d6_result" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F5F5F5;strokeColor=#8A8A8A;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Message à retenir : le CNN-Transformer en classification est retenu pour l’inférence et le dashboard, avec prudence sur la généralisation." vertex="1">
+          <mxGeometry height="60" width="780" x="172.5" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="XCGdCuGOxnXKPNidFLcq-1" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#999999;dashed=1;dashPattern=6 4;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="372" y="300" as="sourcePoint" />
+            <mxPoint x="372" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XCGdCuGOxnXKPNidFLcq-2" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#999999;dashed=1;dashPattern=6 4;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="564.5" y="300" as="sourcePoint" />
+            <mxPoint x="564.5" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

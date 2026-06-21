@@ -1,0 +1,3 @@
+﻿period_id;period_type;period_start_utc;period_end_utc;eruption_start_utc;eruption_end_utc;split;network;stations;channels
+eruption_2019_08_15;eruption;2019-08-13T04:30:00Z;2019-08-15T12:00:00Z;2019-08-15T04:30:00Z;2019-08-15T06:00:00Z;test;PF;CSS,DSO,ENO,FJS,HIM,SNE;HHZ,EHZ,HHE,HHN
+quiet_2018_12_24;quiet;2018-12-24T00:00:00Z;2018-12-26T00:00:00Z;;;test;PF;CSS,DSO,ENO,FJS,HIM,SNE;HHZ,EHZ,HHE,HHN

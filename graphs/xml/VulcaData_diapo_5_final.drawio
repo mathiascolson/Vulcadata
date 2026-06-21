@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="diapo-5---cnn-bilstm-régression" name="Diapo 5 - CNN-BiLSTM régression">
+    <mxGraphModel dx="1414" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="d5_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontColor=#1F2937;fontStyle=1;" value="Approche explorée : CNN-BiLSTM en régression" vertex="1">
+          <mxGeometry height="42" width="820" x="230" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_sub" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontColor=#4B5563;" value="Meilleur candidat pour prédire un horizon temporel avant éruption, mais non retenu comme modèle final" vertex="1">
+          <mxGeometry height="30" width="860" x="210" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF7EA;strokeColor=#5B9A68;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Séquences d’entrée&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;features sismiques&lt;br&gt;fenêtres temporelles&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="185" x="55" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_cnn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF2FF;strokeColor=#4F81BD;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="CNN&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;extrait des motifs locaux&lt;br&gt;dans le signal&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="190" x="280" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_bilstm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F2EAFE;strokeColor=#7E57C2;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="BiLSTM&lt;br&gt;&lt;b&gt;Bidirectional Long Short-Term Memory&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;mémoire temporelle avant / arrière&lt;/span&gt;" vertex="1">
+          <mxGeometry height="125" width="260" x="540" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_dense" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF2FF;strokeColor=#4F81BD;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Dense layer&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;projection finale&lt;/span&gt;" vertex="1">
+          <mxGeometry height="95" width="165" x="855" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_out" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFF3E0;strokeColor=#D9903D;strokeWidth=2;fontSize=15;fontColor=#1F2937;spacing=8;" value="Sortie régression&lt;br&gt;&lt;b&gt;heures avant éruption&lt;/b&gt;" vertex="1">
+          <mxGeometry height="95" width="130" x="1070" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e0" edge="1" parent="1" source="d5_in" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d5_cnn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e1" edge="1" parent="1" source="d5_cnn" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d5_bilstm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e2" edge="1" parent="1" source="d5_bilstm" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d5_dense">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e3" edge="1" parent="1" source="d5_dense" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" target="d5_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_explain1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;Pourquoi le CNN ?&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;Repérer des variations locales : pics, ruptures, changements d’énergie.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="265" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_explain2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;Pourquoi le BiLSTM ?&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;Garder une mémoire sélective de la séquence grâce aux portes du LSTM.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="240" x="550" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_explain3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;fontSize=14;fontColor=#1F2937;spacing=8;" value="&lt;b&gt;Limite finale&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;Une durée prédite reste moins exploitable qu’un niveau d’alerte.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="90" width="300" x="855" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_e4" edge="1" parent="1" source="d5_bilstm" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#999999;dashed=1;dashPattern=6 4;" target="d5_explain2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5_conclusion" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontSize=14;fontColor=#1F2937;spacing=8;" value="Conclusion : approche pertinente pour la régression, mais le CNN-Transformer en classification offre une sortie plus lisible et une meilleure qualité observée pour le dashboard." vertex="1">
+          <mxGeometry height="60" width="760" x="260" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="w8P8OoPH_op6Si5hYWTL-1" edge="1" parent="1" source="d5_cnn" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#999999;dashed=1;dashPattern=6 4;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="d5_explain1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="399" y="300" as="sourcePoint" />
+            <mxPoint x="370" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

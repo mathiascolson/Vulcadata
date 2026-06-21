@@ -58,7 +58,7 @@ CHAMPION_DECISION_PATH = os.getenv(
 )
 REFERENCE_NPZ_PATH = os.getenv(
     "VULCADATA_RETRAINING_REFERENCE_NPZ",
-    "data/preprocessing/processed_full_stride5_with_quiet/volcano_multi.npz",
+    "data/preprocessing/processed/volcano_multi.npz",
 )
 
 TRAINING_SCRIPT = os.getenv(
@@ -423,13 +423,13 @@ with DAG(
         task_id="train_candidate_model",
         bash_command=project_bash(
             f"""
-python -m src.retraining.train_candidate_model \\
-  --detection-report {quote(DETECTION_REPORT_PATH)} \\
-  --training-script {quote(TRAINING_SCRIPT)} \\
-  --output-dir {quote(CANDIDATE_OUTPUT_DIR)} \\
-  --output-json {quote(TRAINING_RESULT_PATH)} \\
-  --epochs {quote(TRAINING_EPOCHS)} \\
-  --batch-size {quote(TRAINING_BATCH_SIZE)} \\
+python -m src.retraining.train_candidate_model \
+  --detection-report {quote(DETECTION_REPORT_PATH)} \
+  --training-script {quote(TRAINING_SCRIPT)} \
+  --output-dir {quote(CANDIDATE_OUTPUT_DIR)} \
+  --output-json {quote(TRAINING_RESULT_PATH)} \
+  --epochs {quote(TRAINING_EPOCHS)} \
+  --batch-size {quote(TRAINING_BATCH_SIZE)} \
   --class-weighting {quote(TRAINING_CLASS_WEIGHTING)} {optional_flag(TRAINING_DEVICE_FLAG)}
 """
         ),
@@ -439,10 +439,10 @@ python -m src.retraining.train_candidate_model \\
         task_id="generate_retraining_evidently_report",
         bash_command=project_bash(
             f"""
-python -m src.retraining.generate_retraining_evidently_report \\
-  --candidate-result {quote(TRAINING_RESULT_PATH)} \\
-  --champion-decision {quote(CHAMPION_DECISION_PATH)} \\
-  --reference-npz {quote(REFERENCE_NPZ_PATH)} \\
+python -m src.retraining.generate_retraining_evidently_report \
+  --candidate-result {quote(TRAINING_RESULT_PATH)} \
+  --champion-decision {quote(CHAMPION_DECISION_PATH)} \
+  --reference-npz {quote(REFERENCE_NPZ_PATH)} \
   --output-dir {quote(DRIFT_OUTPUT_DIR)}
 """
         ),
@@ -452,16 +452,16 @@ python -m src.retraining.generate_retraining_evidently_report \\
         task_id="compare_candidate_to_champion",
         bash_command=project_bash(
             f"""
-python -m src.retraining.compare_candidate_to_champion \\
-  --candidate-result {quote(TRAINING_RESULT_PATH)} \\
-  --champion-decision {quote(CHAMPION_DECISION_PATH)} \\
-  --drift-summary {quote(DRIFT_SUMMARY_PATH)} \\
-  --output-json {quote(COMPARISON_REPORT_PATH)} \\
-  --min-epochs-for-promotion {quote(MIN_EPOCHS_FOR_PROMOTION)} \\
-  --max-business-score-drop {quote(MAX_BUSINESS_SCORE_DROP)} \\
-  --max-alert-24h-f1-drop {quote(MAX_ALERT_24H_F1_DROP)} \\
-  --min-alert-24h-recall {quote(MIN_ALERT_24H_RECALL)} \\
-  --min-alert-24h-precision {quote(MIN_ALERT_24H_PRECISION)} \\
+python -m src.retraining.compare_candidate_to_champion \
+  --candidate-result {quote(TRAINING_RESULT_PATH)} \
+  --champion-decision {quote(CHAMPION_DECISION_PATH)} \
+  --drift-summary {quote(DRIFT_SUMMARY_PATH)} \
+  --output-json {quote(COMPARISON_REPORT_PATH)} \
+  --min-epochs-for-promotion {quote(MIN_EPOCHS_FOR_PROMOTION)} \
+  --max-business-score-drop {quote(MAX_BUSINESS_SCORE_DROP)} \
+  --max-alert-24h-f1-drop {quote(MAX_ALERT_24H_F1_DROP)} \
+  --min-alert-24h-recall {quote(MIN_ALERT_24H_RECALL)} \
+  --min-alert-24h-precision {quote(MIN_ALERT_24H_PRECISION)} \
   --max-class-5-f1-drop {quote(MAX_CLASS_5_F1_DROP)}
 """
         ),
