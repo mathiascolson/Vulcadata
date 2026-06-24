@@ -1,7 +1,8 @@
 # =========================
 # Vulcadata - Git ignore
 # =========================
-
+Narratif_presentation.docx
+~$*
 
 # -------------------------
 # Environment / secrets
