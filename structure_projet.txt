@@ -1,0 +1,1578 @@
+Structure du dossier pour le volume Stockage
+Le numéro de série du volume est 00000052 7AA4:6D66
+D:.
+|   .dockerignore
+|   .env
+|   .gitattributes
+|   .gitignore
+|   Narratif_presentation.docx
+|   pytest.ini
+|   README.md
+|   requirements-ci.txt
+|   structure_projet.txt
+|   VulcaData.pptx
+|   
++---.github
+|   \---workflows
+|           ci.yml
+|           dashboard_ci.yml
+|           
++---.pytest_cache
+|   |   .gitignore
+|   |   CACHEDIR.TAG
+|   |   README.md
+|   |   
+|   \---v
+|       \---cache
+|               nodeids
+|               
++---configs
+|       final_model_decision.before_export_backup.json
+|       final_model_decision.before_pytorch_checkpoint.json
+|       final_model_decision.json
+|       final_model_decision_exported.json
+|       inference_config.yaml
+|       monitoring_config.yaml
+|       pipeline_config.yaml
+|       training_config.yaml
+|       
++---data
+|   +---extraction
+|   |   +---processed_csv
+|   |   |       eruption_2019_08_15_filtered_1_16Hz_aggregated_1min_with_fi.csv
+|   |   |       quiet_2018_12_24_filtered_1_16Hz_aggregated_1min_with_fi.csv
+|   |   |       
+|   |   +---quality_reports
+|   |   |       eruption_2015_10_29_flank_s_csv_validation.json
+|   |   |       eruption_2015_10_29_flank_s_mseed_validation.json
+|   |   |       eruption_2016_05_26_flank_se_csv_validation.json
+|   |   |       eruption_2016_05_26_flank_se_mseed_validation.json
+|   |   |       eruption_2018_04_03_flank_n_ne_csv_validation.json
+|   |   |       eruption_2018_04_03_flank_n_ne_mseed_validation.json
+|   |   |       eruption_2018_07_12_flank_n_csv_validation.json
+|   |   |       eruption_2018_07_12_flank_n_mseed_validation.json
+|   |   |       eruption_2019_02_18_flank_e_csv_validation.json
+|   |   |       eruption_2019_02_18_flank_e_mseed_validation.json
+|   |   |       eruption_2019_06_11_flank_e_csv_validation.json
+|   |   |       eruption_2019_06_11_flank_e_mseed_validation.json
+|   |   |       eruption_2019_07_29_flank_n_csv_validation.json
+|   |   |       eruption_2019_07_29_flank_n_mseed_validation.json
+|   |   |       eruption_2019_08_11_piton_louise_et_henri_cornu_csv_validation.json
+|   |   |       eruption_2019_08_11_piton_louise_et_henri_cornu_mseed_validation.json
+|   |   |       eruption_2019_08_15_csv_validation.json
+|   |   |       eruption_2019_08_15_mseed_validation.json
+|   |   |       eruption_2019_10_25_piton_freri_csv_validation.json
+|   |   |       eruption_2019_10_25_piton_freri_mseed_validation.json
+|   |   |       extraction_summary.json
+|   |   |       quiet_2016_02_10_csv_validation.json
+|   |   |       quiet_2016_02_10_mseed_validation.json
+|   |   |       quiet_2016_11_23_csv_validation.json
+|   |   |       quiet_2016_11_23_mseed_validation.json
+|   |   |       quiet_2017_12_13_csv_validation.json
+|   |   |       quiet_2017_12_13_mseed_validation.json
+|   |   |       quiet_2018_12_24_csv_validation.json
+|   |   |       quiet_2018_12_24_mseed_validation.json
+|   |   |       
+|   |   \---raw_mseed
+|   |           eruption_2019_08_15_20190813_043000Z_20190815_120000Z.mseed
+|   |           quiet_2018_12_24_20181224_000000Z_20181226_000000Z.mseed
+|   |           
+|   +---metadata
+|   |       eruptions_extraction_plan.csv
+|   |       eruptions_metadata.csv
+|   |       extraction_periods.csv
+|   |       volcano_metadata_with_quiet.csv
+|   |       
+|   +---preprocessing
+|   |   +---processed
+|   |   |       feature_names.txt
+|   |   |       imputer.joblib
+|   |   |       inference_npz_validation_report.json
+|   |   |       inference_preprocessing_config.json
+|   |   |       inference_source.npz
+|   |   |       latest_batch.npz
+|   |   |       latest_batch_metadata.json
+|   |   |       metadata_resolved_local_csv.csv
+|   |   |       scaler.joblib
+|   |   |       volcano_multi.npz
+|   |   |       
+|   |   +---processed_core_stride1
+|   |   +---processed_core_stride3
+|   |   |   |   feature_names.txt
+|   |   |   |   imputer.joblib
+|   |   |   |   metadata_resolved_local_csv.csv
+|   |   |   |   preprocessing_config.json
+|   |   |   |   scaler.joblib
+|   |   |   |   volcano_multi.npz
+|   |   |   |   
+|   |   |   \---input_csv_from_s3
+|   |   |           eruption_2015_10_29_flank_s.csv
+|   |   |           eruption_2016_05_26_flank_se.csv
+|   |   |           eruption_2018_04_03_flank_n_ne.csv
+|   |   |           eruption_2018_07_12_flank_n.csv
+|   |   |           eruption_2019_02_18_flank_e.csv
+|   |   |           eruption_2019_06_11_flank_e.csv
+|   |   |           eruption_2019_07_29_flank_n.csv
+|   |   |           eruption_2019_08_11_piton_louise_et_henri_cornu.csv
+|   |   |           eruption_2019_08_15.csv
+|   |   |           eruption_2019_10_25_piton_freri.csv
+|   |   |           
+|   |   +---processed_full_stride5_with_quiet
+|   |   |   |   feature_names.txt
+|   |   |   |   imputer.joblib
+|   |   |   |   metadata_resolved_local_csv.csv
+|   |   |   |   npz_validation_report.json
+|   |   |   |   preprocessing_config.json
+|   |   |   |   s3_outputs_manifest.json
+|   |   |   |   scaler.joblib
+|   |   |   |   volcano_multi.npz
+|   |   |   |   
+|   |   |   \---input_csv_from_s3
+|   |   +---processed_stride1
+|   |   |   |   feature_names.txt
+|   |   |   |   imputer.joblib
+|   |   |   |   metadata_resolved_local_csv.csv
+|   |   |   |   preprocessing_config.json
+|   |   |   |   scaler.joblib
+|   |   |   |   volcano_multi.npz
+|   |   |   |   
+|   |   |   \---input_csv_from_s3
+|   |   |           eruption_2015_10_29_flank_s.csv
+|   |   |           eruption_2016_05_26_flank_se.csv
+|   |   |           eruption_2018_04_03_flank_n_ne.csv
+|   |   |           eruption_2018_07_12_flank_n.csv
+|   |   |           eruption_2019_02_18_flank_e.csv
+|   |   |           eruption_2019_06_11_flank_e.csv
+|   |   |           eruption_2019_07_29_flank_n.csv
+|   |   |           eruption_2019_08_11_piton_louise_et_henri_cornu.csv
+|   |   |           eruption_2019_08_15.csv
+|   |   |           eruption_2019_10_25_piton_freri.csv
+|   |   |           
+|   |   +---processed_stride10
+|   |   |   |   feature_names.txt
+|   |   |   |   imputer.joblib
+|   |   |   |   metadata_resolved_local_csv.csv
+|   |   |   |   preprocessing_config.json
+|   |   |   |   scaler.joblib
+|   |   |   |   volcano_multi.npz
+|   |   |   |   
+|   |   |   \---input_csv_from_s3
+|   |   |           eruption_2015_10_29_flank_s.csv
+|   |   |           eruption_2016_05_26_flank_se.csv
+|   |   |           eruption_2018_04_03_flank_n_ne.csv
+|   |   |           eruption_2018_07_12_flank_n.csv
+|   |   |           eruption_2019_02_18_flank_e.csv
+|   |   |           eruption_2019_06_11_flank_e.csv
+|   |   |           eruption_2019_07_29_flank_n.csv
+|   |   |           eruption_2019_08_11_piton_louise_et_henri_cornu.csv
+|   |   |           eruption_2019_08_15.csv
+|   |   |           eruption_2019_10_25_piton_freri.csv
+|   |   |           
+|   |   +---processed_stride3
+|   |   |   |   feature_names.txt
+|   |   |   |   imputer.joblib
+|   |   |   |   metadata_resolved_local_csv.csv
+|   |   |   |   preprocessing_config.json
+|   |   |   |   scaler.joblib
+|   |   |   |   volcano_multi.npz
+|   |   |   |   
+|   |   |   \---input_csv_from_s3
+|   |   |           eruption_2015_10_29_flank_s.csv
+|   |   |           eruption_2016_05_26_flank_se.csv
+|   |   |           eruption_2018_04_03_flank_n_ne.csv
+|   |   |           eruption_2018_07_12_flank_n.csv
+|   |   |           eruption_2019_02_18_flank_e.csv
+|   |   |           eruption_2019_06_11_flank_e.csv
+|   |   |           eruption_2019_07_29_flank_n.csv
+|   |   |           eruption_2019_08_11_piton_louise_et_henri_cornu.csv
+|   |   |           eruption_2019_08_15.csv
+|   |   |           eruption_2019_10_25_piton_freri.csv
+|   |   |           
+|   |   \---processed_stride5
+|   |       |   feature_names.txt
+|   |       |   imputer.joblib
+|   |       |   metadata_resolved_local_csv.csv
+|   |       |   npz_validation_report.json
+|   |       |   preprocessing_config.json
+|   |       |   scaler.joblib
+|   |       |   volcano_multi.npz
+|   |       |   
+|   |       \---input_csv_from_s3
+|   |               eruption_2015_10_29_flank_s.csv
+|   |               eruption_2016_05_26_flank_se.csv
+|   |               eruption_2018_04_03_flank_n_ne.csv
+|   |               eruption_2018_07_12_flank_n.csv
+|   |               eruption_2019_02_18_flank_e.csv
+|   |               eruption_2019_06_11_flank_e.csv
+|   |               eruption_2019_07_29_flank_n.csv
+|   |               eruption_2019_08_11_piton_louise_et_henri_cornu.csv
+|   |               eruption_2019_08_15.csv
+|   |               eruption_2019_10_25_piton_freri.csv
+|   |               
+|   +---raw
+|   |       Liste_Eruptions_Date_Heure.xlsx
+|   |       
+|   \---retraining
+|       +---manifests
+|       |       preprocessed_files_manifest.json
+|       |       
+|       +---merged
+|       +---ready
+|       \---smoke_test_processed
+|               feature_names.txt
+|               imputer.joblib
+|               metadata_resolved_local_csv.csv
+|               npz_validation_report.json
+|               preprocessing_config.json
+|               scaler.joblib
+|               volcano_multi_smoke.npz
+|               
++---graphs
+|   |   VulcaData_diapo_4_final.png
+|   |   VulcaData_diapo_5_final.png
+|   |   VulcaData_diapo_6_final.png
+|   |   
+|   \---xml
+|           VulcaData_diapo_4_final.drawio
+|           VulcaData_diapo_5_final.drawio
+|           VulcaData_diapo_6_final.drawio
+|           
++---infra
+|   +---airflow
+|   |   |   docker-compose.yml
+|   |   |   Dockerfile
+|   |   |   requirements-airflow.txt
+|   |   |   
+|   |   +---dags
+|   |   |   |   volcano_inference_pipeline.py
+|   |   |   |   volcano_retraining_pipeline.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           volcano_inference_pipeline.cpython-311.pyc
+|   |   |           volcano_inference_pipeline.cpython-313.pyc
+|   |   |           volcano_retraining_pipeline.cpython-311.pyc
+|   |   |           volcano_retraining_pipeline.cpython-313.pyc
+|   |   |           
+|   |   +---dags_backups
+|   |   |       volcano_inference_pipeline_V2.py
+|   |   |       volcano_retraining_pipeline.before_simple_merge.py
+|   |   |       volcano_retraining_pipeline_old.py
+|   |   |       volcano_retraining_pipeline_OLD_New.py
+|   |   |       volcano_retraining_pipeline_V2.py
+|   |   |       
+|   |   +---logs
+|   |   |   +---dag_id=volcano_inference_pipeline
+|   |   |   |   +---run_id=manual__2026-06-20T00?00?00+00?00
+|   |   |   |   |   +---task_id=generate_evidently_report
+|   |   |   |   |   |       attempt=1.log
+|   |   |   |   |   |       
+|   |   |   |   |   +---task_id=prepare_latest_batch
+|   |   |   |   |   |       attempt=1.log
+|   |   |   |   |   |       
+|   |   |   |   |   +---task_id=run_inference
+|   |   |   |   |   |       attempt=1.log
+|   |   |   |   |   |       
+|   |   |   |   |   +---task_id=validate_latest_batch_with_gx
+|   |   |   |   |   |       attempt=1.log
+|   |   |   |   |   |       
+|   |   |   |   |   \---task_id=verify_dashboard_outputs
+|   |   |   |   |           attempt=1.log
+|   |   |   |   |           
+|   |   |   |   \---run_id=manual__2026-06-21T11?39?02.886931+00?00
+|   |   |   |       +---task_id=generate_evidently_report
+|   |   |   |       |       attempt=1.log
+|   |   |   |       |       
+|   |   |   |       +---task_id=prepare_latest_batch
+|   |   |   |       |       attempt=1.log
+|   |   |   |       |       
+|   |   |   |       +---task_id=run_inference
+|   |   |   |       |       attempt=1.log
+|   |   |   |       |       
+|   |   |   |       +---task_id=validate_latest_batch_with_gx
+|   |   |   |       |       attempt=1.log
+|   |   |   |       |       
+|   |   |   |       \---task_id=verify_dashboard_outputs
+|   |   |   |               attempt=1.log
+|   |   |   |               
+|   |   |   +---dag_id=volcano_retraining_pipeline
+|   |   |   |   \---run_id=manual__2026-06-21T11?42?20.351638+00?00
+|   |   |   |       +---task_id=branch_should_retrain
+|   |   |   |       |       attempt=1.log
+|   |   |   |       |       
+|   |   |   |       \---task_id=detect_and_merge_ready_files
+|   |   |   |               attempt=1.log
+|   |   |   |               
+|   |   |   +---dag_processor_manager
+|   |   |   |       dag_processor_manager.log
+|   |   |   |       
+|   |   |   \---scheduler
+|   |   |       +---2026-06-20
+|   |   |       |       volcano_inference_pipeline.py.log
+|   |   |       |       volcano_retraining_pipeline.py.log
+|   |   |       |       
+|   |   |       +---2026-06-21
+|   |   |       |       volcano_inference_pipeline.py.log
+|   |   |       |       volcano_retraining_pipeline.py.log
+|   |   |       |       
+|   |   |       \---latest
+|   |   |               volcano_inference_pipeline.py.log
+|   |   |               volcano_retraining_pipeline.py.log
+|   |   |               
+|   |   \---plugins
+|   \---huggingface_spaces
+|       +---mlflow
+|       |       .gitattributes
+|       |       Dockerfile
+|       |       README.md
+|       |       requirements.txt
+|       |       start_mlflow.sh
+|       |       
+|       \---streamlit
+|           |   .gitattributes
+|           |   .gitignore
+|           |   app.py
+|           |   dashboard_components.py
+|           |   dashboard_config.py
+|           |   dashboard_data.py
+|           |   Dockerfile
+|           |   README.md
+|           |   requirements.txt
+|           |   
+|           +---.streamlit
+|           |       config.toml
+|           |       
+|           \---src
+|                   streamlit_app.py
+|                   
++---models
+|   +---archive
+|   +---cnn_bilstm
+|   |       best_cnn_bilstm.pt
+|   |       history_cnn_bilstm.json
+|   |       metrics_cnn_bilstm.json
+|   |       predictions_cnn_bilstm.npz
+|   |       
+|   +---cnn_bilstm_core_stride3
+|   |       best_cnn_bilstm.pt
+|   |       history_cnn_bilstm.json
+|   |       metrics_cnn_bilstm.json
+|   |       predictions_cnn_bilstm.npz
+|   |       
+|   +---cnn_bilstm_stride5_regularized
+|   |       best_cnn_bilstm.pt
+|   |       history_cnn_bilstm.json
+|   |       metrics_cnn_bilstm.json
+|   |       predictions_cnn_bilstm.npz
+|   |       
+|   +---cnn_transformer_core_stride1_reg_v2
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---cnn_transformer_core_stride3
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---cnn_transformer_core_stride3_reg_v2
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---cnn_transformer_stride1_reg_v2_no_earlystop
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---cnn_transformer_stride3_reg_v2_no_earlystop
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---cnn_transformer_stride5_reg_v2_no_earlystop
+|   |       best_cnn_transformer_regression.pt
+|   |       history_cnn_transformer_regression.json
+|   |       metrics_cnn_transformer_regression.json
+|   |       predictions_cnn_transformer_regression.npz
+|   |       
+|   +---local_candidates
+|   +---mlflow_downloads
+|   |       best_cnn_transformer_classifier.pt
+|   |       
+|   +---mlflow_exports
+|   |   \---champion_classification_model
+|   |       +---checkpoint
+|   |       |       best_cnn_transformer_classifier.pt
+|   |       |       
+|   |       \---mlflow_model
+|   |           |   conda.yaml
+|   |           |   MLmodel
+|   |           |   python_env.yaml
+|   |           |   python_model.pkl
+|   |           |   requirements.txt
+|   |           |   
+|   |           \---artifacts
+|   |                   best_cnn_transformer_classifier.pt
+|   |                   
+|   +---sweeps
+|   |   |   sweep_manifest_full_stride5.jsonl
+|   |   |   
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_low_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_low_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_standard_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_heavier_standard_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_low_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_low_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_standard_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_medium_standard_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_low_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_low_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_standard_lr_regularized_bs32
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---cnn_transformer_full_stride5_cnn_transformer_regularized_base_standard_lr_regularized_bs64
+|   |   |       best_cnn_transformer_regression.pt
+|   |   |       history_cnn_transformer_regression.json
+|   |   |       metrics_cnn_transformer_regression.json
+|   |   |       predictions_cnn_transformer_regression.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_low_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_low_lr_regularized_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_low_lr_strong_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_low_lr_strong_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_standard_lr_light_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_standard_lr_light_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_standard_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_large_standard_lr_regularized_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_low_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_low_lr_regularized_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_low_lr_strong_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_low_lr_strong_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_standard_lr_light_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_standard_lr_light_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_standard_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_light_standard_lr_regularized_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_low_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_low_lr_regularized_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_low_lr_strong_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_low_lr_strong_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_standard_lr_light_regularization_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_standard_lr_light_regularization_bs64
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   +---transformer_full_stride5_transformer_medium_standard_lr_regularized_bs32
+|   |   |       best_transformer.pt
+|   |   |       history_transformer.json
+|   |   |       metrics_transformer.json
+|   |   |       predictions_transformer.npz
+|   |   |       
+|   |   \---transformer_full_stride5_transformer_medium_standard_lr_regularized_bs64
+|   |           best_transformer.pt
+|   |           history_transformer.json
+|   |           metrics_transformer.json
+|   |           predictions_transformer.npz
+|   |           
+|   +---sweeps_cnn_bilstm
+|   |   |   sweep_manifest_cnn_bilstm_full_stride5.jsonl
+|   |   |   
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_low_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_low_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_standard_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_deep_standard_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_low_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_low_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_standard_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_heavier_standard_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_low_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_low_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_standard_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_light_standard_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_low_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_low_lr_regularized_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_low_lr_strong_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_low_lr_strong_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   +---cnn_bilstm_full_stride5_cnn_bilstm_medium_standard_lr_regularized_bs32
+|   |   |       best_cnn_bilstm.pt
+|   |   |       history_cnn_bilstm.json
+|   |   |       metrics_cnn_bilstm.json
+|   |   |       predictions_cnn_bilstm.npz
+|   |   |       
+|   |   \---cnn_bilstm_full_stride5_cnn_bilstm_medium_standard_lr_regularized_bs64
+|   |           best_cnn_bilstm.pt
+|   |           history_cnn_bilstm.json
+|   |           metrics_cnn_bilstm.json
+|   |           predictions_cnn_bilstm.npz
+|   |           
+|   +---sweeps_cnn_bilstm_classification
+|   |   |   sweep_manifest_cnn_bilstm_with_quiet_stride5.jsonl
+|   |   |   
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_low_lr_alert_priority_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_low_lr_alert_priority_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_low_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_low_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_smoothed_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_deep_standard_lr_smoothed_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_low_lr_alert_priority_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_low_lr_alert_priority_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_low_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_low_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_smoothed_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_heavier_standard_lr_smoothed_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_low_lr_alert_priority_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_low_lr_alert_priority_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_low_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_low_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_smoothed_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_light_standard_lr_smoothed_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_low_lr_alert_priority_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_low_lr_alert_priority_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_low_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_low_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_balanced_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_balanced_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_light_regularization_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_light_regularization_bs64
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   +---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_smoothed_bs32
+|   |   |       best_cnn_bilstm_classifier.pt
+|   |   |       confusion_matrix_cnn_bilstm_classifier.npy
+|   |   |       history_cnn_bilstm_classifier.json
+|   |   |       metrics_cnn_bilstm_classifier.json
+|   |   |       predictions_cnn_bilstm_classifier.npz
+|   |   |       
+|   |   \---cnn_bilstm_with_quiet_stride5_cnn_bilstm_medium_standard_lr_smoothed_bs64
+|   |           best_cnn_bilstm_classifier.pt
+|   |           confusion_matrix_cnn_bilstm_classifier.npy
+|   |           history_cnn_bilstm_classifier.json
+|   |           metrics_cnn_bilstm_classifier.json
+|   |           predictions_cnn_bilstm_classifier.npz
+|   |           
+|   +---sweeps_cnn_lstm_bi
+|   |       sweep_manifest_cnn_lstm_bi_full_stride5.jsonl
+|   |       
+|   +---sweeps_targeted_classification
+|   |   |   sweep_manifest_targeted_classification_with_quiet_stride5.jsonl
+|   |   |   
+|   |   +---cnn_transformer_classification_with_quiet_stride5_full_cnn_transformer_medium_alert_priority
+|   |   |       best_cnn_transformer_classifier.pt
+|   |   |       confusion_matrix_cnn_transformer_classifier.npy
+|   |   |       history_cnn_transformer_classifier.json
+|   |   |       metrics_cnn_transformer_classifier.json
+|   |   |       predictions_cnn_transformer_classifier.npz
+|   |   |       
+|   |   +---cnn_transformer_classification_with_quiet_stride5_full_cnn_transformer_medium_balanced
+|   |   |       best_cnn_transformer_classifier.pt
+|   |   |       confusion_matrix_cnn_transformer_classifier.npy
+|   |   |       history_cnn_transformer_classifier.json
+|   |   |       metrics_cnn_transformer_classifier.json
+|   |   |       predictions_cnn_transformer_classifier.npz
+|   |   |       
+|   |   +---cnn_transformer_classification_with_quiet_stride5_full_cnn_transformer_medium_early_warning_priority
+|   |   |       best_cnn_transformer_classifier.pt
+|   |   |       confusion_matrix_cnn_transformer_classifier.npy
+|   |   |       history_cnn_transformer_classifier.json
+|   |   |       metrics_cnn_transformer_classifier.json
+|   |   |       predictions_cnn_transformer_classifier.npz
+|   |   |       
+|   |   \---cnn_transformer_classification_with_quiet_stride5_full_cnn_transformer_medium_none
+|   |           best_cnn_transformer_classifier.pt
+|   |           confusion_matrix_cnn_transformer_classifier.npy
+|   |           history_cnn_transformer_classifier.json
+|   |           metrics_cnn_transformer_classifier.json
+|   |           predictions_cnn_transformer_classifier.npz
+|   |           
+|   +---sweeps_targeted_regression
+|   |   |   sweep_manifest_targeted_regression_stride5.jsonl
+|   |   |   
+|   |   +---cnn_bilstm_regression_stride5_core_cnn_bilstm_best_sweep_balanced_horizon
+|   |   |       best_cnn_bilstm_regression.pt
+|   |   |       history_cnn_bilstm_regression.json
+|   |   |       metrics_cnn_bilstm_regression.json
+|   |   |       predictions_cnn_bilstm_regression.npz
+|   |   |       
+|   |   +---cnn_bilstm_regression_stride5_core_cnn_bilstm_best_sweep_early_warning
+|   |   |       best_cnn_bilstm_regression.pt
+|   |   |       history_cnn_bilstm_regression.json
+|   |   |       metrics_cnn_bilstm_regression.json
+|   |   |       predictions_cnn_bilstm_regression.npz
+|   |   |       
+|   |   +---cnn_bilstm_regression_stride5_core_cnn_bilstm_best_sweep_none
+|   |   |       best_cnn_bilstm_regression.pt
+|   |   |       history_cnn_bilstm_regression.json
+|   |   |       metrics_cnn_bilstm_regression.json
+|   |   |       predictions_cnn_bilstm_regression.npz
+|   |   |       
+|   |   +---cnn_bilstm_regression_stride5_full_cnn_bilstm_best_sweep_balanced_horizon
+|   |   |       best_cnn_bilstm_regression.pt
+|   |   |       history_cnn_bilstm_regression.json
+|   |   |       metrics_cnn_bilstm_regression.json
+|   |   |       predictions_cnn_bilstm_regression.npz
+|   |   |       
+|   |   +---cnn_bilstm_regression_stride5_full_cnn_bilstm_best_sweep_early_warning
+|   |   |       best_cnn_bilstm_regression.pt
+|   |   |       history_cnn_bilstm_regression.json
+|   |   |       metrics_cnn_bilstm_regression.json
+|   |   |       predictions_cnn_bilstm_regression.npz
+|   |   |       
+|   |   \---cnn_bilstm_regression_stride5_full_cnn_bilstm_best_sweep_none
+|   |           best_cnn_bilstm_regression.pt
+|   |           history_cnn_bilstm_regression.json
+|   |           metrics_cnn_bilstm_regression.json
+|   |           predictions_cnn_bilstm_regression.npz
+|   |           
+|   +---test_transformer_classifier
+|   |       best_transformer_classifier.pt
+|   |       confusion_matrix_transformer_classifier.npy
+|   |       history_transformer_classifier.json
+|   |       metrics_transformer_classifier.json
+|   |       predictions_transformer_classifier.npz
+|   |       
+|   +---transformer
+|   |       best_transformer.pt
+|   |       history_transformer.json
+|   |       metrics_transformer.json
+|   |       predictions_transformer.npz
+|   |       
+|   +---transformer_core_stride3
+|   |       best_transformer.pt
+|   |       history_transformer.json
+|   |       metrics_transformer.json
+|   |       predictions_transformer.npz
+|   |       
+|   +---transformer_stride10_regularized
+|   |       best_transformer.pt
+|   |       history_transformer.json
+|   |       metrics_transformer.json
+|   |       predictions_transformer.npz
+|   |       
+|   +---transformer_stride3_regularized
+|   |       best_transformer.pt
+|   |       history_transformer.json
+|   |       metrics_transformer.json
+|   |       predictions_transformer.npz
+|   |       
+|   \---transformer_stride5_regularized
+|           best_transformer.pt
+|           history_transformer.json
+|           metrics_transformer.json
+|           predictions_transformer.npz
+|           
++---reports
+|   |   cache_files_to_delete.csv
+|   |   feature_names.json
+|   |   git_clean_dry_run.txt
+|   |   git_ignored_files.txt
+|   |   git_tracked_files.txt
+|   |   ignored_large_files.csv
+|   |   project_inventory.csv
+|   |   project_inventory_summary.csv
+|   |   tracked_review_dependency_audit.csv
+|   |   tracked_review_files.csv
+|   |   
+|   +---evidently
+|   +---gx
+|   +---inference
+|   |       latest_result.json
+|   |       
+|   +---loo_regression
+|   |       loo_manifest_regression_regression_full_stride5_cnn_bilstm_none.jsonl
+|   |       
+|   +---loo_regression_summary
+|   |       loo_regression_aggregate_stats.csv
+|   |       loo_regression_summary.csv
+|   |       
+|   +---model_sweep_comparison
+|   |       best_model_recommendation.json
+|   |       mlflow_runs_raw.csv
+|   |       model_sweep_comparison_ranked.csv
+|   |       model_sweep_summary_by_family.csv
+|   |       
+|   +---monitoring
+|   |   \---evidently
+|   |           latest_data_drift.html
+|   |           latest_data_drift.json
+|   |           latest_data_drift_summary.json
+|   |           
+|   +---project_structure
+|   |       structure_vulcadata_depth3.txt
+|   |       structure_vulcadata_relative_depth3.txt
+|   |       tree_vulcadata.txt
+|   |       
+|   +---quiet_vs_no_quiet_sweep_analysis
+|   |       all_runs_extracted.csv
+|   |       all_runs_filtered.csv
+|   |       all_runs_scored.csv
+|   |       best_models_recommendation.json
+|   |       classification_with_quiet_ranked.csv
+|   |       classification_with_quiet_summary_by_family.csv
+|   |       mlflow_runs_raw.csv
+|   |       quiet_vs_no_quiet_comparison.csv
+|   |       regression_ranked.csv
+|   |       regression_summary_by_family.csv
+|   |       
+|   +---retraining
+|   |       new_preprocessed_files_detection.json
+|   |       
+|   +---sweep_analysis_full_stride5
+|   |       comparison_by_batch_size.csv
+|   |       comparison_by_dropout.csv
+|   |       comparison_by_learning_rate.csv
+|   |       comparison_by_model_family.csv
+|   |       comparison_by_weight_decay.csv
+|   |       comparison_model_family_best_mae.png
+|   |       complexity_vs_test_mae.png
+|   |       effect_batch_size.png
+|   |       effect_dropout.png
+|   |       effect_learning_rate.png
+|   |       effect_weight_decay.png
+|   |       mlflow_sweep_results.csv
+|   |       sweep_analysis_report.md
+|   |       top_20_runs.csv
+|   |       top_runs_test_mae.png
+|   |       
+|   +---targeted_classification_analysis
+|   |       all_runs_extracted.csv
+|   |       all_runs_filtered.csv
+|   |       all_runs_ranked.csv
+|   |       best_models_recommendation.json
+|   |       classification_ranked.csv
+|   |       classification_summary.csv
+|   |       feature_set_summary.csv
+|   |       mlflow_runs_raw.csv
+|   |       regression_ranked.csv
+|   |       regression_summary.csv
+|   |       
+|   +---targeted_regression_analysis
+|   |       all_runs_extracted.csv
+|   |       all_runs_filtered.csv
+|   |       all_runs_ranked.csv
+|   |       best_models_recommendation.json
+|   |       classification_ranked.csv
+|   |       classification_summary.csv
+|   |       feature_set_summary.csv
+|   |       mlflow_runs_raw.csv
+|   |       regression_ranked.csv
+|   |       regression_summary.csv
+|   |       
+|   +---threshold_optimization
+|   |   +---cnn_transformer_alert_priority
+|   |   |       best_threshold_alert_24h.json
+|   |   |       threshold_scan_alert_24h.csv
+|   |   |       
+|   |   +---cnn_transformer_none
+|   |   |       best_threshold_alert_24h.json
+|   |   |       threshold_scan_alert_24h.csv
+|   |   |       
+|   |   \---comparison
+|   |           threshold_comparison_all_results.csv
+|   |           threshold_comparison_best_by_model.csv
+|   |           threshold_comparison_winner.json
+|   |           
+|   \---validation
+|           latest_batch_gx_validation.json
+|           
++---scripts
+|   |   __init__.py
+|   |   
+|   +---extraction
+|   |       upload_existing_extractions_to_s3.py
+|   |       
+|   +---integration
+|   |       check_mlflow_server_connection.py
+|   |       
+|   +---mlflow
+|   |       build_final_model_decision.py
+|   |       
+|   +---preprocessing
+|   |       prepare_volcano_sequences.py
+|   |       prepare_volcano_sequences_core.py
+|   |       prepare_volcano_sequences_with_quiet.py
+|   |       validate_npz_dataset.py
+|   |       
+|   \---training
+|           train_cnn_transformer_classif.py
+|           train_cnn_transformer_classif_modified_Vfinetuning.py
+|           __init__.py
+|           
++---src
+|   |   __init__.py
+|   |   
+|   +---common
+|   |   |   config.py
+|   |   |   s3.py
+|   |   |   time_utils.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           config.cpython-313.pyc
+|   |           s3.cpython-311.pyc
+|   |           s3.cpython-313.pyc
+|   |           time_utils.cpython-311.pyc
+|   |           time_utils.cpython-313.pyc
+|   |           __init__.cpython-311.pyc
+|   |           __init__.cpython-313.pyc
+|   |           
+|   +---extraction
+|   |   |   extract_volcano_periods.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           extract_volcano_periods.cpython-313.pyc
+|   |           __init__.cpython-313.pyc
+|   |           
+|   +---inference
+|   |   |   load_model.before_pytorch_checkpoint.py
+|   |   |   load_model.py
+|   |   |   postprocess_predictions.py
+|   |   |   predict_volcano_alert.py
+|   |   |   prepare_latest_batch.py
+|   |   |   run_inference.py
+|   |   |   validate_latest_batch_with_gx.py
+|   |   |   verify_dashboard_outputs.py
+|   |   |   write_dashboard_outputs.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           load_model.cpython-311.pyc
+|   |           load_model.cpython-313.pyc
+|   |           postprocess_predictions.cpython-311.pyc
+|   |           postprocess_predictions.cpython-313.pyc
+|   |           predict_volcano_alert.cpython-311.pyc
+|   |           predict_volcano_alert.cpython-313.pyc
+|   |           prepare_latest_batch.cpython-311.pyc
+|   |           prepare_latest_batch.cpython-313.pyc
+|   |           run_inference.cpython-311.pyc
+|   |           run_inference.cpython-313.pyc
+|   |           validate_latest_batch_with_gx.cpython-311.pyc
+|   |           validate_latest_batch_with_gx.cpython-313.pyc
+|   |           verify_dashboard_outputs.cpython-311.pyc
+|   |           verify_dashboard_outputs.cpython-313.pyc
+|   |           write_dashboard_outputs.cpython-311.pyc
+|   |           write_dashboard_outputs.cpython-313.pyc
+|   |           __init__.cpython-311.pyc
+|   |           __init__.cpython-313.pyc
+|   |           
+|   +---monitoring
+|   |   |   generate_evidently_report.py
+|   |   |   monitoring_init_.py
+|   |   |   
+|   |   \---__pycache__
+|   |           generate_evidently_report.cpython-311.pyc
+|   |           generate_evidently_report.cpython-313.pyc
+|   |           
+|   +---preprocessing
+|   |   |   preprocess_volcano_dataset.py
+|   |   |   __init__.py
+|   |   |   
+|   |   \---__pycache__
+|   |           preprocess_volcano_dataset.cpython-313.pyc
+|   |           __init__.cpython-313.pyc
+|   |           
+|   +---retraining
+|   |   |   compare_candidate_to_champion.py
+|   |   |   detect_new_preprocessed_files.py
+|   |   |   generate_retraining_evidently_report.py
+|   |   |   mark_preprocessed_files_as_integrated.py
+|   |   |   promote_candidate_if_approved.py
+|   |   |   train_candidate_model.py
+|   |   |   
+|   |   +---backups
+|   |   |       compare_candidate_to_champion_20260618_204038.py
+|   |   |       compare_candidate_to_champion_20260618_204454.py
+|   |   |       
+|   |   \---__pycache__
+|   |           compare_candidate_to_champion.cpython-313.pyc
+|   |           generate_retraining_evidently_report.cpython-313.pyc
+|   |           mark_preprocessed_files_as_integrated.cpython-313.pyc
+|   |           promote_candidate_if_approved.cpython-313.pyc
+|   |           train_candidate_model.cpython-313.pyc
+|   |           
+|   +---training
+|   |       __init__.py
+|   |       
+|   +---validation
+|   |       __init__.py
+|   |       
+|   \---__pycache__
+|           __init__.cpython-311.pyc
+|           __init__.cpython-313.pyc
+|           
+\---tests
+    |   test_alert_rule.py
+    |   test_config.py
+    |   test_extract_volcano_periods_contract.py
+    |   test_final_model_decision.py
+    |   test_load_model.py
+    |   test_mark_preprocessed_files_as_integrated.py
+    |   test_npz_input_validation.py
+    |   test_postprocess_predictions.py
+    |   test_predict_volcano_alert.py
+    |   test_prepare_latest_batch.py
+    |   test_preprocess_volcano_dataset_contract.py
+    |   test_run_inference.py
+    |   test_s3.py
+    |   test_time_utils.py
+    |   test_validate_latest_batch_with_gx.py
+    |   test_vulcadata_pipeline_contracts.py
+    |   test_write_dashboard_outputs.py
+    |   
+    \---__pycache__
+            test_alert_rule.cpython-313-pytest-9.1.0.pyc
+            test_config.cpython-313-pytest-9.1.0.pyc
+            test_extract_volcano_periods_contract.cpython-313-pytest-9.1.0.pyc
+            test_final_model_decision.cpython-313-pytest-9.1.0.pyc
+            test_load_model.cpython-313-pytest-9.1.0.pyc
+            test_mark_preprocessed_files_as_integrated.cpython-313-pytest-9.1.0.pyc
+            test_npz_input_validation.cpython-313-pytest-9.1.0.pyc
+            test_postprocess_predictions.cpython-313-pytest-9.1.0.pyc
+            test_predict_volcano_alert.cpython-313-pytest-9.1.0.pyc
+            test_prepare_latest_batch.cpython-313-pytest-9.1.0.pyc
+            test_preprocess_volcano_dataset_contract.cpython-313-pytest-9.1.0.pyc
+            test_run_inference.cpython-313-pytest-9.1.0.pyc
+            test_s3.cpython-313-pytest-9.1.0.pyc
+            test_time_utils.cpython-313-pytest-9.1.0.pyc
+            test_validate_latest_batch_with_gx.cpython-313-pytest-9.1.0.pyc
+            test_vulcadata_pipeline_contracts.cpython-313-pytest-9.1.0.pyc
+            test_write_dashboard_outputs.cpython-313-pytest-9.1.0.pyc
+            
