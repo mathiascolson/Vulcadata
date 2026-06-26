@@ -51,6 +51,10 @@ PROMOTION_REPORT_PATH = os.getenv(
     "VULCADATA_CANDIDATE_PROMOTION_RESULT_JSON",
     "reports/retraining/candidate_promotion_result.json",
 )
+DECISION_MLFLOW_REPORT_PATH = os.getenv(
+    "VULCADATA_RETRAINING_DECISION_MLFLOW_RESULT_JSON",
+    "reports/retraining/retraining_decision_mlflow_result.json",
+)
 
 CHAMPION_DECISION_PATH = os.getenv(
     "VULCADATA_FINAL_MODEL_DECISION_JSON",
@@ -74,9 +78,18 @@ MIN_NEW_FILES_FOR_RETRAINING = int(os.getenv("VULCADATA_MIN_NEW_FILES_FOR_RETRAI
 EXPECTED_SEQ_LEN = int(os.getenv("VULCADATA_EXPECTED_SEQ_LEN", "120"))
 EXPECTED_N_FEATURES = int(os.getenv("VULCADATA_EXPECTED_N_FEATURES", "992"))
 
-TRAINING_EPOCHS = int(os.getenv("VULCADATA_RETRAINING_EPOCHS", "1"))
+TRAINING_EPOCHS = int(os.getenv("VULCADATA_RETRAINING_EPOCHS", "2"))
 TRAINING_BATCH_SIZE = int(os.getenv("VULCADATA_RETRAINING_BATCH_SIZE", "16"))
+TRAINING_LEARNING_RATE = float(os.getenv("VULCADATA_RETRAINING_LEARNING_RATE", "3e-4"))
+TRAINING_WEIGHT_DECAY = float(os.getenv("VULCADATA_RETRAINING_WEIGHT_DECAY", "1e-3"))
+TRAINING_EARLY_STOPPING_PATIENCE = int(os.getenv("VULCADATA_RETRAINING_EARLY_STOPPING_PATIENCE", "3"))
+TRAINING_EARLY_STOPPING_METRIC = os.getenv(
+    "VULCADATA_RETRAINING_EARLY_STOPPING_METRIC",
+    "business_score_classification",
+)
 TRAINING_CLASS_WEIGHTING = os.getenv("VULCADATA_RETRAINING_CLASS_WEIGHTING", "alert_priority")
+TRAINING_N_CLASSES = int(os.getenv("VULCADATA_RETRAINING_N_CLASSES", "6"))
+TRAINING_RUN_NAME = os.getenv("VULCADATA_RETRAINING_RUN_NAME", "airflow_cnn_transformer_candidate")
 TRAINING_DEVICE_FLAG = os.getenv("VULCADATA_RETRAINING_DEVICE_FLAG", "--cpu")
 
 MIN_EPOCHS_FOR_PROMOTION = int(os.getenv("VULCADATA_MIN_EPOCHS_FOR_PROMOTION", "2"))
@@ -112,6 +125,27 @@ S3_DECISION_KEY = os.getenv(
     "model_decisions/final_model_decision.json",
 )
 PROMOTION_EXTRA_FLAGS = os.getenv("VULCADATA_PROMOTION_EXTRA_FLAGS", "")
+
+USE_MLFLOW = os.getenv("VULCADATA_RETRAINING_USE_MLFLOW", "true").strip().lower() in {
+    "1",
+    "true",
+    "yes",
+    "y",
+    "on",
+}
+MLFLOW_TRACKING_URI = (
+    os.getenv("VULCADATA_MLFLOW_TRACKING_URI")
+    or os.getenv("MLFLOW_TRACKING_URI")
+)
+MLFLOW_EXPERIMENT_NAME = (
+    os.getenv("VULCADATA_MLFLOW_EXPERIMENT_NAME")
+    or os.getenv("MLFLOW_EXPERIMENT_NAME")
+    or "Vulcadata"
+)
+DECISION_MLFLOW_RUN_NAME = os.getenv(
+    "VULCADATA_RETRAINING_DECISION_MLFLOW_RUN_NAME",
+    "airflow_retraining_decision",
+)
 
 
 def project_bash(command: str) -> str:
@@ -212,6 +246,7 @@ def detect_and_merge_ready_npz() -> None:
     ready_dir = as_project_path(READY_DIR)
     merged_root = as_project_path(MERGED_DIR)
     detection_report_path = as_project_path(DETECTION_REPORT_PATH)
+    reference_npz_path = as_project_path(REFERENCE_NPZ_PATH)
 
     ready_dir.mkdir(parents=True, exist_ok=True)
     merged_root.mkdir(parents=True, exist_ok=True)
@@ -220,15 +255,20 @@ def detect_and_merge_ready_npz() -> None:
     source_files = sorted(ready_dir.glob("*.npz"))
     source_file_infos = [npz_file_info(path) for path in source_files]
 
+    base_reference_info: dict[str, Any] | None = None
+    if reference_npz_path.exists():
+        base_reference_info = npz_file_info(reference_npz_path)
+
     if len(source_files) < MIN_NEW_FILES_FOR_RETRAINING:
         report = {
             "status": "success",
             "should_retrain": False,
             "ready_dir": READY_DIR,
             "merged_dir": MERGED_DIR,
+            "base_reference_npz": base_reference_info,
             "candidate_files_count": len(source_files),
             "min_new_files_for_retraining": MIN_NEW_FILES_FOR_RETRAINING,
-            "selection_policy": "merge_all_ready_npz_on_sequence_axis",
+            "selection_policy": "base_reference_plus_all_ready_npz_on_sequence_axis",
             "concat_axis": 0,
             "expected_seq_len": EXPECTED_SEQ_LEN,
             "expected_n_features": EXPECTED_N_FEATURES,
@@ -240,13 +280,21 @@ def detect_and_merge_ready_npz() -> None:
         detection_report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
         return
 
-    loaded_files = [load_and_validate_npz(path) for path in source_files]
+    if not reference_npz_path.exists():
+        raise FileNotFoundError(f"Reference NPZ not found: {reference_npz_path}")
+
+    reference_payload = load_and_validate_npz(reference_npz_path)
+    ready_payloads = [load_and_validate_npz(path) for path in source_files]
+    payloads_to_merge = [reference_payload, *ready_payloads]
+
     merged_payload: dict[str, Any] = {}
 
     for key in ["X_train", "y_train", "X_val", "y_val", "X_test", "y_test"]:
-        merged_payload[key] = np.concatenate([payload[key] for payload in loaded_files], axis=0)
+        merged_payload[key] = np.concatenate(
+            [payload[key] for payload in payloads_to_merge],
+            axis=0,
+        )
 
-    reference_payload = loaded_files[0]
     for key, value in reference_payload.items():
         if key not in merged_payload:
             merged_payload[key] = value
@@ -254,27 +302,38 @@ def detect_and_merge_ready_npz() -> None:
     timestamp = utc_now_compact()
     merged_dir = merged_root / timestamp
     merged_dir.mkdir(parents=True, exist_ok=True)
-    merged_npz_path = merged_dir / "merged_ready_batch.npz"
+    merged_npz_path = merged_dir / "candidate_training_dataset.npz"
     np.savez_compressed(merged_npz_path, **merged_payload)
 
     merged_info = npz_file_info(merged_npz_path)
-    merged_info["source_files_count"] = len(source_files)
-    merged_info["source_files"] = source_file_infos
+    merged_info["base_reference_npz"] = base_reference_info
+    merged_info["new_source_files_count"] = len(source_files)
+    merged_info["new_source_files"] = source_file_infos
+    merged_info["selection_policy"] = "base_reference_plus_all_ready_npz_on_sequence_axis"
+
+    split_shapes = {}
+    for split_name in ("train", "val", "test"):
+        split_shapes[split_name] = {
+            "X_shape": list(merged_payload[f"X_{split_name}"].shape),
+            "y_shape": list(merged_payload[f"y_{split_name}"].shape),
+        }
 
     report = {
         "status": "success",
         "should_retrain": True,
         "ready_dir": READY_DIR,
         "merged_dir": MERGED_DIR,
+        "base_reference_npz": base_reference_info,
         "candidate_files_count": len(source_files),
         "min_new_files_for_retraining": MIN_NEW_FILES_FOR_RETRAINING,
-        "selection_policy": "merge_all_ready_npz_on_sequence_axis",
+        "selection_policy": "base_reference_plus_all_ready_npz_on_sequence_axis",
         "concat_axis": 0,
         "expected_seq_len": EXPECTED_SEQ_LEN,
         "expected_n_features": EXPECTED_N_FEATURES,
         "source_files": source_file_infos,
         "files_to_process": [merged_info],
         "merged_npz_path": relative_to_project(merged_npz_path),
+        "merged_split_shapes": split_shapes,
         "generated_at_utc": utc_now_iso(),
     }
     detection_report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -384,6 +443,33 @@ def optional_flag(value: str) -> str:
     return value
 
 
+def mlflow_training_flags() -> str:
+    if not USE_MLFLOW:
+        return ""
+
+    flags = ["--use-mlflow"]
+
+    if MLFLOW_TRACKING_URI:
+        flags.extend(["--mlflow-tracking-uri", quote(MLFLOW_TRACKING_URI)])
+
+    if MLFLOW_EXPERIMENT_NAME:
+        flags.extend(["--mlflow-experiment-name", quote(MLFLOW_EXPERIMENT_NAME)])
+
+    return " ".join(flags)
+
+
+def mlflow_decision_flags() -> str:
+    flags: list[str] = []
+
+    if MLFLOW_TRACKING_URI:
+        flags.extend(["--mlflow-tracking-uri", quote(MLFLOW_TRACKING_URI)])
+
+    if MLFLOW_EXPERIMENT_NAME:
+        flags.extend(["--mlflow-experiment-name", quote(MLFLOW_EXPERIMENT_NAME)])
+
+    return " ".join(flags)
+
+
 def quote(value: str | int | float) -> str:
     return shlex.quote(str(value))
 
@@ -430,7 +516,13 @@ python -m src.retraining.train_candidate_model \
   --output-json {quote(TRAINING_RESULT_PATH)} \
   --epochs {quote(TRAINING_EPOCHS)} \
   --batch-size {quote(TRAINING_BATCH_SIZE)} \
-  --class-weighting {quote(TRAINING_CLASS_WEIGHTING)} {optional_flag(TRAINING_DEVICE_FLAG)}
+  --learning-rate {quote(TRAINING_LEARNING_RATE)} \
+  --weight-decay {quote(TRAINING_WEIGHT_DECAY)} \
+  --early-stopping-patience {quote(TRAINING_EARLY_STOPPING_PATIENCE)} \
+  --early-stopping-metric {quote(TRAINING_EARLY_STOPPING_METRIC)} \
+  --class-weighting {quote(TRAINING_CLASS_WEIGHTING)} \
+  --n-classes {quote(TRAINING_N_CLASSES)} \
+  --run-name {quote(TRAINING_RUN_NAME)} {mlflow_training_flags()} {optional_flag(TRAINING_DEVICE_FLAG)}
 """
         ),
     )
@@ -488,9 +580,26 @@ python -m src.retraining.promote_candidate_if_approved \
         ),
     )
 
-    archive_processed_source_files = PythonOperator(
+    archive_processed_source_files_task = PythonOperator(
         task_id="archive_processed_source_files",
         python_callable=archive_processed_source_files,
+    )
+
+    log_retraining_decision_to_mlflow = BashOperator(
+        task_id="log_retraining_decision_to_mlflow",
+        bash_command=project_bash(
+            f"""
+python -m src.retraining.log_retraining_decision_to_mlflow \
+  --candidate-result {quote(TRAINING_RESULT_PATH)} \
+  --comparison-json {quote(COMPARISON_REPORT_PATH)} \
+  --promotion-result {quote(PROMOTION_REPORT_PATH)} \
+  --drift-summary {quote(DRIFT_SUMMARY_PATH)} \
+  --detection-report {quote(DETECTION_REPORT_PATH)} \
+  --archive-report {quote(ARCHIVE_REPORT_PATH)} \
+  --output-json {quote(DECISION_MLFLOW_REPORT_PATH)} \
+  --run-name {quote(DECISION_MLFLOW_RUN_NAME)} {mlflow_decision_flags()}
+"""
+        ),
     )
 
     end = EmptyOperator(
@@ -506,6 +615,7 @@ python -m src.retraining.promote_candidate_if_approved \
         >> generate_retraining_evidently_report
         >> compare_candidate_to_champion
         >> promote_candidate_if_approved
-        >> archive_processed_source_files
+        >> archive_processed_source_files_task
+        >> log_retraining_decision_to_mlflow
         >> end
     )

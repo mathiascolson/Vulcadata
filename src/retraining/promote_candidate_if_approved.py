@@ -373,6 +373,9 @@ def promote_candidate_if_approved(args: argparse.Namespace) -> dict[str, Any]:
     output_json_path = resolve_path(args.output_json, project_root)
 
     comparison = read_json(comparison_path)
+    candidate_result = read_json(candidate_result_path) if candidate_result_path.exists() else {}
+    candidate_training_run_id = get_candidate_training_run_id(comparison, candidate_result)
+    candidate_mlflow_run_id = get_candidate_mlflow_run_id(comparison, candidate_result)
 
     if comparison.get("status") != "success":
         payload = {
@@ -380,7 +383,10 @@ def promote_candidate_if_approved(args: argparse.Namespace) -> dict[str, Any]:
             "action": "promotion_skipped",
             "reason": "comparison_status_is_not_success",
             "comparison_status": comparison.get("status"),
+            "candidate_training_run_id": candidate_training_run_id,
+            "candidate_mlflow_run_id": candidate_mlflow_run_id,
             "comparison_json": str(comparison_path),
+            "candidate_result_json": str(candidate_result_path) if candidate_result_path.exists() else None,
             "generated_at_utc": generated_at_utc,
         }
         write_json(payload, output_json_path)
@@ -394,13 +400,15 @@ def promote_candidate_if_approved(args: argparse.Namespace) -> dict[str, Any]:
             "decision": comparison.get("decision"),
             "eligible_for_promotion": comparison.get("eligible_for_promotion"),
             "decision_reason": comparison.get("decision_reason"),
+            "candidate_training_run_id": candidate_training_run_id,
+            "candidate_mlflow_run_id": candidate_mlflow_run_id,
             "comparison_json": str(comparison_path),
+            "candidate_result_json": str(candidate_result_path) if candidate_result_path.exists() else None,
             "generated_at_utc": generated_at_utc,
         }
         write_json(payload, output_json_path)
         return payload
 
-    candidate_result = read_json(candidate_result_path)
     decision_config = read_json(decision_config_path)
 
     candidate_checkpoint = resolve_path(
@@ -410,9 +418,6 @@ def promote_candidate_if_approved(args: argparse.Namespace) -> dict[str, Any]:
     local_champion_checkpoint = resolve_path(args.local_champion_checkpoint, project_root)
     local_champion_archive_dir = resolve_path(args.local_champion_archive_dir, project_root)
     decision_archive_dir = resolve_path(args.decision_archive_dir, project_root)
-
-    candidate_training_run_id = get_candidate_training_run_id(comparison, candidate_result)
-    candidate_mlflow_run_id = get_candidate_mlflow_run_id(comparison, candidate_result)
 
     local_checkpoint_result = promote_local_checkpoint(
         candidate_checkpoint=candidate_checkpoint,

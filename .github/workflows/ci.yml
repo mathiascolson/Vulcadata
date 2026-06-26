@@ -31,22 +31,24 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
 
           if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
+            python -m pip install -r requirements.txt
           else
-            pip install pytest pyyaml numpy pandas scikit-learn torch boto3 botocore mlflow evidently great-expectations python-dotenv
+            python -m pip install pytest pyyaml numpy pandas scikit-learn torch boto3 botocore mlflow evidently great-expectations python-dotenv obspy
           fi
 
           if [ -f requirements-dev.txt ]; then
-            pip install -r requirements-dev.txt
+            python -m pip install -r requirements-dev.txt
           fi
+
+          python -m pip install obspy
 
       - name: Run tests
         run: |
           python -m pytest tests -v
-
