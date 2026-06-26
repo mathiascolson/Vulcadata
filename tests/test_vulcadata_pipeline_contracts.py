@@ -199,6 +199,7 @@ def test_final_model_decision_operational_contract() -> None:
         "src/retraining/generate_retraining_evidently_report.py",
         "src/retraining/compare_candidate_to_champion.py",
         "src/retraining/promote_candidate_if_approved.py",
+        "src/retraining/log_retraining_decision_to_mlflow.py",
         "infra/airflow/dags/volcano_inference_pipeline.py",
         "infra/airflow/dags/volcano_retraining_pipeline.py",
     ],
@@ -220,6 +221,7 @@ def test_critical_scripts_compile(relative_path: str) -> None:
         "src.retraining.generate_retraining_evidently_report",
         "src.retraining.compare_candidate_to_champion",
         "src.retraining.promote_candidate_if_approved",
+        "src.retraining.log_retraining_decision_to_mlflow",
     ],
 )
 def test_critical_modules_are_importable(module_name: str) -> None:
@@ -231,6 +233,7 @@ def test_critical_modules_are_importable(module_name: str) -> None:
 @pytest.mark.parametrize(
     "relative_path,report_type",
     [
+        ("reports/retraining/retraining_decision_mlflow_result.json", "decision_mlflow"),
         ("reports/retraining/new_preprocessed_files_detection.json", "detection"),
         ("reports/retraining/candidate_training_result.json", "training"),
         ("reports/retraining/evidently/candidate_drift_summary.json", "drift"),
@@ -268,6 +271,20 @@ def test_existing_retraining_report_contracts(relative_path: str, report_type: s
 
     if report_type == "promotion":
         assert payload.get("action") in {"promotion_skipped", "candidate_promoted", "candidate_promotion_dry_run"}
+
+    if report_type == "decision_mlflow":
+        assert payload.get("run_name") == "airflow_retraining_decision"
+        assert isinstance(payload.get("decision_mlflow_run_id"), str)
+        assert payload["decision_mlflow_run_id"]
+        assert isinstance(payload.get("decision_mlflow_artifact_uri"), str)
+        assert payload["decision_mlflow_artifact_uri"]
+        assert "candidate_mlflow_run_id" in payload
+        assert payload.get("decision") in {"promote_candidate", "reject_candidate"}
+        assert payload.get("promotion_action") in {
+            "promotion_skipped",
+            "candidate_promoted",
+            "candidate_promotion_dry_run",
+        }
 
     if report_type == "archive":
         assert isinstance(payload.get("archived_files_count"), int)
