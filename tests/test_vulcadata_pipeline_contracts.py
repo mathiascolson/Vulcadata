@@ -294,6 +294,45 @@ def test_existing_retraining_report_contracts(relative_path: str, report_type: s
         assert payload["archived_files_count"] >= 0
 
 
+def test_existing_inference_mlflow_report_contract() -> None:
+    relative_path = "reports/inference/inference_mlflow_log.json"
+    path = PROJECT_ROOT / relative_path
+
+    if not path.exists():
+        pytest.skip(f"Report not generated yet: {relative_path}")
+
+    payload = read_json(path)
+
+    assert payload.get("status") == "success", f"{relative_path} must have status=success"
+    assert isinstance(payload.get("mlflow_run_id"), str)
+    assert payload["mlflow_run_id"]
+    assert isinstance(payload.get("mlflow_artifact_uri"), str)
+    assert payload["mlflow_artifact_uri"]
+    assert payload.get("dag_id") == "volcano_inference_pipeline"
+    assert isinstance(payload.get("dag_run_id"), str)
+    assert payload["dag_run_id"]
+    assert payload.get("task_id") == "log_inference_metadata_to_mlflow"
+    assert payload.get("gx_success") is True
+    assert isinstance(payload.get("s3_latest_prediction_uri"), str)
+    assert payload["s3_latest_prediction_uri"]
+    assert any(
+        isinstance(payload.get(key), str) and payload[key]
+        for key in ["model_uri", "s3_model_checkpoint_uri", "runtime_model_source"]
+    )
+    assert isinstance(payload.get("source_npz"), str)
+    assert payload["source_npz"]
+    assert isinstance(payload.get("latest_batch_npz"), str)
+    assert payload["latest_batch_npz"]
+    assert isinstance(payload.get("output_json"), str)
+    assert payload["output_json"]
+    assert isinstance(payload.get("gx_validation_output_json"), str)
+    assert payload["gx_validation_output_json"]
+    assert isinstance(payload.get("predicted_class"), int)
+    assert isinstance(payload.get("predicted_probability"), (int, float))
+    assert isinstance(payload.get("p_alert_24h"), (int, float))
+    assert isinstance(payload.get("alert_24h"), bool)
+
+
 def test_promotion_is_skipped_when_candidate_is_rejected(tmp_path: Path) -> None:
     from src.retraining.promote_candidate_if_approved import promote_candidate_if_approved
 

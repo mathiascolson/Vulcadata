@@ -222,10 +222,41 @@ def verify_local_inference_output() -> None:
         raise ValueError(f"p_alert_24h not found in inference output: {OUTPUT_JSON}")
 
 
-def log_inference_metadata_to_mlflow() -> None:
+def log_inference_metadata_to_mlflow(**context: Any) -> None:
+    dag_run = context.get("dag_run")
+    task_instance = context.get("ti") or context.get("task_instance")
+    logical_date = context.get("logical_date") or context.get("execution_date")
+
+    dag_run_id = getattr(dag_run, "run_id", None)
+    task_id = getattr(task_instance, "task_id", None)
+    try_number = getattr(task_instance, "try_number", None)
+    logical_date_value = logical_date.isoformat() if hasattr(logical_date, "isoformat") else logical_date
+
+    evidently_report_json = str(Path(EVIDENTLY_OUTPUT_DIR) / f"{EVIDENTLY_REPORT_NAME}.json")
+    evidently_summary_json = str(Path(EVIDENTLY_OUTPUT_DIR) / f"{EVIDENTLY_REPORT_NAME}_summary.json")
+    s3_latest_prediction_uri = (
+        f"s3://{S3_BUCKET}/{S3_LATEST_PREDICTION_KEY.lstrip('/')}"
+        if WRITE_S3_OUTPUTS and S3_BUCKET and S3_LATEST_PREDICTION_KEY
+        else None
+    )
+    s3_evidently_report_uri = (
+        f"s3://{S3_BUCKET}/{EVIDENTLY_S3_PREFIX.strip('/')}/{EVIDENTLY_REPORT_NAME}.json"
+        if WRITE_EVIDENTLY_S3 and S3_BUCKET and EVIDENTLY_S3_PREFIX
+        else None
+    )
+    s3_evidently_summary_uri = (
+        f"s3://{S3_BUCKET}/{EVIDENTLY_S3_PREFIX.strip('/')}/{EVIDENTLY_REPORT_NAME}_summary.json"
+        if WRITE_EVIDENTLY_S3 and S3_BUCKET and EVIDENTLY_S3_PREFIX
+        else None
+    )
+
     report: dict[str, Any] = {
         "status": "started",
         "dag_id": DAG_ID,
+        "dag_run_id": dag_run_id,
+        "task_id": task_id,
+        "try_number": try_number,
+        "logical_date": logical_date_value,
         "project_root": PROJECT_ROOT,
         "inference_periods_csv": INFERENCE_PERIODS_CSV,
         "processed_csv_dir": PROCESSED_CSV_DIR,
@@ -233,13 +264,20 @@ def log_inference_metadata_to_mlflow() -> None:
         "inference_output_dir": INFERENCE_OUTPUT_DIR,
         "source_npz": SOURCE_NPZ,
         "latest_batch_npz": LATEST_BATCH_NPZ,
+        "inference_config": INFERENCE_CONFIG,
+        "model_decision": MODEL_DECISION,
         "output_json": OUTPUT_JSON,
         "gx_validation_output_json": GX_VALIDATION_OUTPUT_JSON,
+        "evidently_report_json": evidently_report_json,
+        "evidently_summary_json": evidently_summary_json,
         "evidently_output_dir": EVIDENTLY_OUTPUT_DIR,
         "write_s3_outputs": WRITE_S3_OUTPUTS,
         "write_evidently_s3": WRITE_EVIDENTLY_S3,
         "s3_bucket": S3_BUCKET if WRITE_S3_OUTPUTS else None,
         "s3_latest_prediction_key": S3_LATEST_PREDICTION_KEY if WRITE_S3_OUTPUTS else None,
+        "s3_latest_prediction_uri": s3_latest_prediction_uri,
+        "s3_evidently_report_uri": s3_evidently_report_uri,
+        "s3_evidently_summary_uri": s3_evidently_summary_uri,
         "mlflow_experiment_name": MLFLOW_EXPERIMENT_NAME,
     }
 
@@ -259,6 +297,12 @@ def log_inference_metadata_to_mlflow() -> None:
     inference_payload = read_json_file(OUTPUT_JSON)
     gx_payload = read_json_file(GX_VALIDATION_OUTPUT_JSON)
 
+    try:
+        model_decision_payload = read_json_file(MODEL_DECISION)
+    except Exception as exc:
+        model_decision_payload = {}
+        report["model_decision_read_error"] = repr(exc)
+
     prediction_payload = (
         inference_payload.get("prediction")
         if isinstance(inference_payload.get("prediction"), dict)
@@ -276,6 +320,54 @@ def log_inference_metadata_to_mlflow() -> None:
     )
     alert_24h_value = find_first_value(prediction_payload, {"alert_24h"})
 
+    gx_success = gx_payload.get("gx_success")
+
+    model_uri = find_first_value(
+        model_decision_payload,
+        {
+            "model_uri",
+            "runtime_model_uri",
+            "candidate_model_uri",
+            "champion_model_uri",
+        },
+    )
+    model_run_id = find_first_value(
+        model_decision_payload,
+        {
+            "run_id",
+            "model_run_id",
+            "mlflow_run_id",
+            "classification_run_id",
+        },
+    )
+    s3_model_checkpoint_uri = find_first_value(
+        model_decision_payload,
+        {
+            "s3_model_checkpoint_uri",
+            "checkpoint_s3_uri",
+            "s3_checkpoint_uri",
+            "model_checkpoint_uri",
+            "checkpoint_uri",
+        },
+    )
+    runtime_model_source = find_first_value(
+        model_decision_payload,
+        {
+            "runtime_model_source",
+            "model_source",
+            "selected_model_source",
+        },
+    )
+
+    report.update(
+        {
+            "model_uri": model_uri,
+            "model_run_id": model_run_id,
+            "s3_model_checkpoint_uri": s3_model_checkpoint_uri,
+            "runtime_model_source": runtime_model_source,
+        }
+    )
+
     tracking_uri = os.getenv("MLFLOW_TRACKING_URI") or os.getenv("VULCADATA_MLFLOW_TRACKING_URI")
     if tracking_uri:
         mlflow.set_tracking_uri(tracking_uri)
@@ -283,18 +375,60 @@ def log_inference_metadata_to_mlflow() -> None:
     mlflow.set_experiment(MLFLOW_EXPERIMENT_NAME)
 
     with mlflow.start_run(run_name="airflow_inference_pipeline") as run:
-        mlflow.log_param("dag_id", DAG_ID)
-        mlflow.log_param("source_npz", SOURCE_NPZ)
-        mlflow.log_param("latest_batch_npz", LATEST_BATCH_NPZ)
-        mlflow.log_param("inference_periods_csv", INFERENCE_PERIODS_CSV)
-        mlflow.log_param("reference_artifacts_dir", REFERENCE_ARTIFACTS_DIR)
-        mlflow.log_param("expected_seq_len", EXPECTED_SEQ_LEN)
-        mlflow.log_param("expected_n_features", EXPECTED_N_FEATURES)
-        mlflow.log_param("latest_batch_size", LATEST_BATCH_SIZE)
-        mlflow.log_param("write_s3_outputs", WRITE_S3_OUTPUTS)
-        mlflow.log_param("write_evidently_s3", WRITE_EVIDENTLY_S3)
-        mlflow.log_param("s3_bucket", S3_BUCKET if WRITE_S3_OUTPUTS else "")
-        mlflow.log_param("s3_latest_prediction_key", S3_LATEST_PREDICTION_KEY if WRITE_S3_OUTPUTS else "")
+        params = {
+            "dag_id": DAG_ID,
+            "dag_run_id": dag_run_id,
+            "task_id": task_id,
+            "try_number": try_number,
+            "logical_date": logical_date_value,
+            "source_npz": SOURCE_NPZ,
+            "latest_batch_npz": LATEST_BATCH_NPZ,
+            "inference_periods_csv": INFERENCE_PERIODS_CSV,
+            "reference_artifacts_dir": REFERENCE_ARTIFACTS_DIR,
+            "inference_config": INFERENCE_CONFIG,
+            "model_decision": MODEL_DECISION,
+            "output_json": OUTPUT_JSON,
+            "gx_validation_output_json": GX_VALIDATION_OUTPUT_JSON,
+            "evidently_report_json": evidently_report_json,
+            "evidently_summary_json": evidently_summary_json,
+            "expected_seq_len": EXPECTED_SEQ_LEN,
+            "expected_n_features": EXPECTED_N_FEATURES,
+            "latest_batch_size": LATEST_BATCH_SIZE,
+            "write_s3_outputs": WRITE_S3_OUTPUTS,
+            "write_evidently_s3": WRITE_EVIDENTLY_S3,
+            "s3_bucket": S3_BUCKET if WRITE_S3_OUTPUTS else "",
+            "s3_latest_prediction_key": S3_LATEST_PREDICTION_KEY if WRITE_S3_OUTPUTS else "",
+            "s3_latest_prediction_uri": s3_latest_prediction_uri,
+            "s3_evidently_report_uri": s3_evidently_report_uri,
+            "s3_evidently_summary_uri": s3_evidently_summary_uri,
+            "model_uri": model_uri,
+            "model_run_id": model_run_id,
+            "s3_model_checkpoint_uri": s3_model_checkpoint_uri,
+            "runtime_model_source": runtime_model_source,
+        }
+        mlflow.log_params(
+            {
+                key: str(value)[:500]
+                for key, value in params.items()
+                if value is not None
+            }
+        )
+
+        tags = {
+            "pipeline": DAG_ID,
+            "run_role": "inference_audit",
+            "dag_run_id": dag_run_id,
+            "task_id": task_id,
+            "gx_success": gx_success,
+            "alert_24h": alert_24h_value,
+        }
+        mlflow.set_tags(
+            {
+                key: str(value)[:500]
+                for key, value in tags.items()
+                if value is not None
+            }
+        )
 
         if predicted_class is not None:
             mlflow.log_metric("predicted_class", predicted_class)
@@ -305,15 +439,16 @@ def log_inference_metadata_to_mlflow() -> None:
         if isinstance(alert_24h_value, bool):
             mlflow.log_metric("alert_24h", int(alert_24h_value))
 
-        gx_success = gx_payload.get("gx_success")
         if isinstance(gx_success, bool):
             mlflow.log_metric("latest_batch_gx_success", int(gx_success))
 
         for artifact_path in [
             OUTPUT_JSON,
             GX_VALIDATION_OUTPUT_JSON,
-            str(Path(EVIDENTLY_OUTPUT_DIR) / f"{EVIDENTLY_REPORT_NAME}.json"),
-            str(Path(EVIDENTLY_OUTPUT_DIR) / f"{EVIDENTLY_REPORT_NAME}_summary.json"),
+            evidently_report_json,
+            evidently_summary_json,
+            INFERENCE_CONFIG,
+            MODEL_DECISION,
         ]:
             resolved_artifact_path = as_project_path(artifact_path)
             if resolved_artifact_path.exists():
@@ -323,6 +458,7 @@ def log_inference_metadata_to_mlflow() -> None:
             {
                 "status": "success",
                 "mlflow_run_id": run.info.run_id,
+                "mlflow_artifact_uri": run.info.artifact_uri,
                 "predicted_class": predicted_class,
                 "predicted_probability": predicted_probability,
                 "p_alert_24h": p_alert_24h,
@@ -332,7 +468,6 @@ def log_inference_metadata_to_mlflow() -> None:
         )
 
     write_json_file(report, MLFLOW_REPORT_JSON)
-
 
 preprocess_inference_dataset_command = project_command(
     "python -m src.preprocessing.preprocess_volcano_dataset "
