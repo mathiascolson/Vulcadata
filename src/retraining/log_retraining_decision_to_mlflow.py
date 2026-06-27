@@ -189,6 +189,23 @@ def log_artifact_if_exists(mlflow: Any, path: Path, artifact_path: str = "retrai
         mlflow.log_artifact(str(path), artifact_path=artifact_path)
 
 
+def resolve_mlflow_artifact_uri(mlflow: Any, run_id: str | None) -> str | None:
+    if not run_id:
+        return None
+
+    try:
+        client = mlflow.tracking.MlflowClient()
+        run = client.get_run(run_id)
+    except Exception:
+        return None
+
+    artifact_uri = getattr(run.info, "artifact_uri", None)
+    if not artifact_uri:
+        return None
+
+    return str(artifact_uri)
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     candidate_result_path = Path(args.candidate_result)
     comparison_path = Path(args.comparison_json)
@@ -207,6 +224,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     tracking_uri = args.mlflow_tracking_uri or os.getenv("MLFLOW_TRACKING_URI")
     experiment_name = args.mlflow_experiment_name or os.getenv("MLFLOW_EXPERIMENT_NAME") or DEFAULT_EXPERIMENT_NAME
+
+    candidate_mlflow_run_id = (
+        comparison.get("candidate_mlflow_run_id")
+        or candidate_result.get("mlflow_run_id")
+        or promotion.get("candidate_mlflow_run_id")
+    )
+    candidate_mlflow_artifact_uri: str | None = None
 
     try:
         import mlflow
@@ -238,6 +262,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             detection_report=detection_report,
         )
 
+        candidate_mlflow_run_id = tags.get("candidate_mlflow_run_id") or candidate_mlflow_run_id
+        candidate_mlflow_artifact_uri = resolve_mlflow_artifact_uri(
+            mlflow=mlflow,
+            run_id=candidate_mlflow_run_id,
+        )
+
+        if candidate_mlflow_artifact_uri:
+            tags["candidate_mlflow_artifact_uri"] = candidate_mlflow_artifact_uri[:500]
+            params["candidate_mlflow_artifact_uri"] = candidate_mlflow_artifact_uri[:500]
+
         with mlflow.start_run(run_name=args.run_name, tags=tags) as active_run:
             mlflow.log_params(params)
             if metrics:
@@ -262,6 +296,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "decision_mlflow_run_id": decision_mlflow_run_id,
             "decision_mlflow_artifact_uri": decision_mlflow_artifact_uri,
             "candidate_mlflow_run_id": tags.get("candidate_mlflow_run_id"),
+            "candidate_mlflow_artifact_uri": candidate_mlflow_artifact_uri,
             "candidate_training_run_id": tags.get("candidate_training_run_id"),
             "decision": comparison.get("decision"),
             "promotion_action": promotion.get("action"),
@@ -281,11 +316,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "status": "error",
             "error_type": type(exc).__name__,
             "error_message": str(exc),
-            "candidate_mlflow_run_id": (
-                comparison.get("candidate_mlflow_run_id")
-                or candidate_result.get("mlflow_run_id")
-                or promotion.get("candidate_mlflow_run_id")
-            ),
+            "candidate_mlflow_run_id": candidate_mlflow_run_id,
+            "candidate_mlflow_artifact_uri": candidate_mlflow_artifact_uri,
             "decision": comparison.get("decision"),
             "promotion_action": promotion.get("action"),
             "experiment_name": experiment_name,

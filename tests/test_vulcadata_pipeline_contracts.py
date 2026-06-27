@@ -279,6 +279,9 @@ def test_existing_retraining_report_contracts(relative_path: str, report_type: s
         assert isinstance(payload.get("decision_mlflow_artifact_uri"), str)
         assert payload["decision_mlflow_artifact_uri"]
         assert "candidate_mlflow_run_id" in payload
+        if payload.get("candidate_mlflow_run_id"):
+            assert isinstance(payload.get("candidate_mlflow_artifact_uri"), str)
+            assert payload["candidate_mlflow_artifact_uri"]
         assert payload.get("decision") in {"promote_candidate", "reject_candidate"}
         assert payload.get("promotion_action") in {
             "promotion_skipped",
