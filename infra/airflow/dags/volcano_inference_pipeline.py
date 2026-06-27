@@ -466,8 +466,6 @@ with DAG(
         >> validate_latest_batch_with_gx
         >> run_inference
         >> verify_local_inference_output_task
-        >> generate_evidently_report
-        >> log_inference_metadata_to_mlflow_task
     )
 
     if WRITE_S3_OUTPUTS and VERIFY_S3_DASHBOARD:
@@ -476,4 +474,15 @@ with DAG(
             bash_command=verify_dashboard_outputs_command,
         )
 
-        run_inference >> verify_dashboard_outputs >> generate_evidently_report
+        (
+            verify_local_inference_output_task
+            >> verify_dashboard_outputs
+            >> generate_evidently_report
+            >> log_inference_metadata_to_mlflow_task
+        )
+    else:
+        (
+            verify_local_inference_output_task
+            >> generate_evidently_report
+            >> log_inference_metadata_to_mlflow_task
+        )
