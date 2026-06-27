@@ -200,6 +200,7 @@ def test_final_model_decision_operational_contract() -> None:
         "src/retraining/compare_candidate_to_champion.py",
         "src/retraining/promote_candidate_if_approved.py",
         "src/retraining/log_retraining_decision_to_mlflow.py",
+        "src/retraining/validate_retraining_dataset.py",
         "infra/airflow/dags/volcano_inference_pipeline.py",
         "infra/airflow/dags/volcano_retraining_pipeline.py",
     ],
@@ -222,6 +223,7 @@ def test_critical_scripts_compile(relative_path: str) -> None:
         "src.retraining.compare_candidate_to_champion",
         "src.retraining.promote_candidate_if_approved",
         "src.retraining.log_retraining_decision_to_mlflow",
+        "src.retraining.validate_retraining_dataset",
     ],
 )
 def test_critical_modules_are_importable(module_name: str) -> None:
@@ -240,6 +242,7 @@ def test_critical_modules_are_importable(module_name: str) -> None:
         ("reports/retraining/candidate_vs_champion_comparison.json", "comparison"),
         ("reports/retraining/candidate_promotion_result.json", "promotion"),
         ("reports/retraining/archive_processed_ready_files.json", "archive"),
+        ("reports/retraining/retraining_dataset_gx_validation.json", "retraining_gx"),
     ],
 )
 def test_existing_retraining_report_contracts(relative_path: str, report_type: str) -> None:
@@ -264,6 +267,15 @@ def test_existing_retraining_report_contracts(relative_path: str, report_type: s
     if report_type == "drift":
         assert isinstance(payload.get("critical_drift_detected"), bool)
         assert isinstance(payload.get("candidate_rejected_by_drift_check"), bool)
+
+    if report_type == "retraining_gx":
+        assert payload.get("gx_success") is True
+        assert isinstance(payload.get("split_shapes"), dict)
+        assert isinstance(payload.get("split_profiles"), list)
+        assert len(payload["split_profiles"]) == 3
+        assert payload.get("expected_seq_len") == 120
+        assert payload.get("expected_n_features") == 992
+        assert payload.get("n_classes") == 6
 
     if report_type == "comparison":
         assert payload.get("decision") in {"promote_candidate", "reject_candidate"}
@@ -378,3 +390,32 @@ def test_promotion_is_skipped_when_candidate_is_rejected(tmp_path: Path) -> None
 
     assert saved_result["status"] == "success"
     assert saved_result["action"] == "promotion_skipped"
+
+def test_retraining_dag_preprocesses_and_validates_training_dataset_before_ready_file_detection() -> None:
+    dag_path = PROJECT_ROOT / "infra/airflow/dags/volcano_retraining_pipeline.py"
+
+    assert dag_path.exists(), "Missing retraining DAG"
+
+    source = dag_path.read_text(encoding="utf-8")
+    normalized_source = " ".join(source.split())
+
+    assert "check_retraining_csv_inputs" in source
+    assert "preprocess_retraining_dataset" in source
+    assert "validate_retraining_dataset" in source
+    assert "detect_and_merge_ready_files" in source
+    assert "--mode training" in source
+    assert "--training-output-name" in source
+    assert "validate_retraining_dataset" in source
+    assert "reports/retraining/retraining_dataset_gx_validation.json" in source
+
+    expected_chain = (
+        "start >> check_retraining_csv_inputs >> preprocess_retraining_dataset "
+        ">> validate_retraining_dataset >> detect_and_merge_ready_files "
+        ">> branch_should_retrain"
+    )
+
+    assert expected_chain in normalized_source
+    assert "start >> detect_and_merge_ready_files" not in normalized_source
+    assert "preprocess_retraining_dataset >> detect_and_merge_ready_files" not in normalized_source
+
+

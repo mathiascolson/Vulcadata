@@ -23,6 +23,31 @@ READY_DIR = os.getenv("VULCADATA_RETRAINING_READY_DIR", "data/retraining/ready")
 MERGED_DIR = os.getenv("VULCADATA_RETRAINING_MERGED_DIR", "data/retraining/merged")
 ARCHIVE_DIR = os.getenv("VULCADATA_RETRAINING_ARCHIVE_DIR", "data/retraining/archive")
 
+PERIODS_CSV = os.getenv(
+    "VULCADATA_RETRAINING_PERIODS_CSV",
+    "data/metadata/extraction_periods.csv",
+)
+PROCESSED_CSV_DIR = os.getenv(
+    "VULCADATA_PROCESSED_CSV_DIR",
+    "data/extraction/processed_csv",
+)
+RETRAINING_PERIODS_CSV = os.getenv(
+    "VULCADATA_RETRAINING_PERIODS_RESOLVED_CSV",
+    "reports/retraining/training_periods_for_preprocessing.csv",
+)
+RETRAINING_CSV_INPUT_CHECK_JSON = os.getenv(
+    "VULCADATA_RETRAINING_CSV_INPUT_CHECK_JSON",
+    "reports/retraining/processed_csv_input_check.json",
+)
+RETRAINING_OUTPUT_NAME = os.getenv(
+    "VULCADATA_RETRAINING_OUTPUT_NAME",
+    "volcano_multi_retraining_{{ ts_nodash }}.npz",
+)
+CSV_SUFFIX = os.getenv(
+    "VULCADATA_AGGREGATED_CSV_SUFFIX",
+    "_filtered_1_16Hz_aggregated_1min_with_fi.csv",
+)
+
 DETECTION_REPORT_PATH = os.getenv(
     "VULCADATA_NEW_FILES_DETECTION_OUTPUT_JSON",
     "reports/retraining/new_preprocessed_files_detection.json",
@@ -55,6 +80,11 @@ DECISION_MLFLOW_REPORT_PATH = os.getenv(
     "VULCADATA_RETRAINING_DECISION_MLFLOW_RESULT_JSON",
     "reports/retraining/retraining_decision_mlflow_result.json",
 )
+RETRAINING_GX_VALIDATION_OUTPUT_JSON = os.getenv(
+    "VULCADATA_RETRAINING_GX_VALIDATION_JSON",
+    "reports/retraining/retraining_dataset_gx_validation.json",
+)
+
 
 CHAMPION_DECISION_PATH = os.getenv(
     "VULCADATA_FINAL_MODEL_DECISION_JSON",
@@ -77,6 +107,14 @@ CANDIDATE_OUTPUT_DIR = os.getenv(
 MIN_NEW_FILES_FOR_RETRAINING = int(os.getenv("VULCADATA_MIN_NEW_FILES_FOR_RETRAINING", "1"))
 EXPECTED_SEQ_LEN = int(os.getenv("VULCADATA_EXPECTED_SEQ_LEN", "120"))
 EXPECTED_N_FEATURES = int(os.getenv("VULCADATA_EXPECTED_N_FEATURES", "992"))
+
+FEATURE_WINDOW_MINUTES = int(os.getenv("VULCADATA_FEATURE_WINDOW_MINUTES", "10"))
+SEQUENCE_STRIDE = int(os.getenv("VULCADATA_SEQUENCE_STRIDE", "5"))
+MAX_HORIZON_HOURS = float(os.getenv("VULCADATA_MAX_HORIZON_HOURS", "48.0"))
+ENTROPY_BINS = int(os.getenv("VULCADATA_ENTROPY_BINS", "20"))
+SPLIT_STRATEGY = os.getenv("VULCADATA_SPLIT_STRATEGY", "chronological")
+TRAIN_RATIO = float(os.getenv("VULCADATA_TRAIN_RATIO", "0.70"))
+VAL_RATIO = float(os.getenv("VULCADATA_VAL_RATIO", "0.15"))
 
 TRAINING_EPOCHS = int(os.getenv("VULCADATA_RETRAINING_EPOCHS", "2"))
 TRAINING_BATCH_SIZE = int(os.getenv("VULCADATA_RETRAINING_BATCH_SIZE", "16"))
@@ -178,6 +216,172 @@ def relative_to_project(path: str | Path) -> str:
         return str(path.relative_to(PROJECT_ROOT))
     except ValueError:
         return str(path)
+
+
+def read_csv_auto(path: Path):
+    import pandas as pd
+
+    return pd.read_csv(
+        path,
+        dtype=str,
+        keep_default_na=False,
+        sep=None,
+        engine="python",
+        encoding="utf-8-sig",
+    )
+
+
+def clean_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def normalize_period_type(value: Any) -> str:
+    normalized_value = clean_text(value).lower()
+
+    if normalized_value in {"eruption", "eruptive", "event"}:
+        return "eruption"
+
+    if normalized_value in {"quiet", "calm", "calme", "background", "non_eruptive"}:
+        return "quiet"
+
+    if normalized_value in {"inference", "predict", "prediction", "unknown"}:
+        return "inference"
+
+    raise ValueError(
+        f"Invalid period_type: {value}. Expected values: eruption, quiet or inference."
+    )
+
+
+def write_json(payload: dict[str, Any], output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def build_retraining_periods_file() -> None:
+    periods_path = as_project_path(PERIODS_CSV)
+    processed_csv_dir = as_project_path(PROCESSED_CSV_DIR)
+    retraining_periods_path = as_project_path(RETRAINING_PERIODS_CSV)
+    check_report_path = as_project_path(RETRAINING_CSV_INPUT_CHECK_JSON)
+
+    if not periods_path.exists():
+        raise FileNotFoundError(f"Periods file not found: {periods_path}")
+
+    periods = read_csv_auto(periods_path)
+    periods.columns = [str(column).strip() for column in periods.columns]
+
+    required_columns = {"period_id", "period_type"}
+    missing_columns = required_columns - set(periods.columns)
+    if missing_columns:
+        raise ValueError(f"Missing columns in periods file: {sorted(missing_columns)}")
+
+    for optional_column in ["eruption_start_utc", "eruption_end_utc", "split", "csv_path"]:
+        if optional_column not in periods.columns:
+            periods[optional_column] = ""
+
+    selected_rows: list[dict[str, Any]] = []
+    skipped_rows: list[dict[str, Any]] = []
+    missing_csv: list[dict[str, Any]] = []
+
+    for _, row in periods.iterrows():
+        period_id = clean_text(row.get("period_id"))
+        period_type = normalize_period_type(row.get("period_type"))
+
+        if not period_id:
+            raise ValueError("Empty period_id in periods file.")
+
+        csv_path_value = clean_text(row.get("csv_path"))
+        if csv_path_value:
+            csv_path = Path(csv_path_value)
+            if not csv_path.is_absolute():
+                csv_path = as_project_path(csv_path)
+        else:
+            csv_path = processed_csv_dir / f"{period_id}{CSV_SUFFIX}"
+
+        if period_type == "inference":
+            skipped_rows.append(
+                {
+                    "period_id": period_id,
+                    "period_type": period_type,
+                    "reason": "period_type_inference_excluded_from_retraining",
+                    "csv_path": relative_to_project(csv_path),
+                }
+            )
+            continue
+
+        if period_type == "eruption" and not clean_text(row.get("eruption_start_utc")):
+            raise ValueError(f"Missing eruption_start_utc for eruptive period: {period_id}")
+
+        if not csv_path.exists():
+            missing_csv.append(
+                {
+                    "period_id": period_id,
+                    "period_type": period_type,
+                    "expected_csv_path": relative_to_project(csv_path),
+                }
+            )
+            continue
+
+        selected_rows.append(
+            {
+                "period_id": period_id,
+                "period_type": period_type,
+                "eruption_start_utc": clean_text(row.get("eruption_start_utc")),
+                "eruption_end_utc": clean_text(row.get("eruption_end_utc")),
+                "split": clean_text(row.get("split")),
+                "csv_path": str(csv_path),
+            }
+        )
+
+    if missing_csv:
+        report = {
+            "status": "failed",
+            "reason": "missing_aggregated_csv",
+            "periods_csv": relative_to_project(periods_path),
+            "processed_csv_dir": relative_to_project(processed_csv_dir),
+            "selected_rows_count": len(selected_rows),
+            "skipped_rows_count": len(skipped_rows),
+            "missing_csv_count": len(missing_csv),
+            "missing_csv": missing_csv,
+            "generated_at_utc": utc_now_iso(),
+        }
+        write_json(report, check_report_path)
+        raise FileNotFoundError(f"Missing aggregated CSV files. See report: {check_report_path}")
+
+    if not selected_rows:
+        report = {
+            "status": "failed",
+            "reason": "no_retraining_period_available",
+            "periods_csv": relative_to_project(periods_path),
+            "processed_csv_dir": relative_to_project(processed_csv_dir),
+            "selected_rows_count": 0,
+            "skipped_rows_count": len(skipped_rows),
+            "skipped_rows": skipped_rows,
+            "generated_at_utc": utc_now_iso(),
+        }
+        write_json(report, check_report_path)
+        raise ValueError("No retraining period available after excluding inference periods.")
+
+    import pandas as pd
+
+    retraining_periods_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(selected_rows).to_csv(retraining_periods_path, index=False)
+
+    report = {
+        "status": "success",
+        "periods_csv": relative_to_project(periods_path),
+        "processed_csv_dir": relative_to_project(processed_csv_dir),
+        "retraining_periods_csv": relative_to_project(retraining_periods_path),
+        "selected_rows_count": len(selected_rows),
+        "skipped_rows_count": len(skipped_rows),
+        "missing_csv_count": 0,
+        "selected_periods": [row["period_id"] for row in selected_rows],
+        "skipped_rows": skipped_rows,
+        "csv_suffix": CSV_SUFFIX,
+        "generated_at_utc": utc_now_iso(),
+    }
+    write_json(report, check_report_path)
 
 
 def npz_file_info(path: Path) -> dict[str, Any]:
@@ -474,6 +678,36 @@ def quote(value: str | int | float) -> str:
     return shlex.quote(str(value))
 
 
+preprocess_retraining_dataset_command = project_bash(
+    "python -m src.preprocessing.preprocess_volcano_dataset "
+    "--mode training "
+    f"--periods {quote(RETRAINING_PERIODS_CSV)} "
+    f"--processed-csv-dir {quote(PROCESSED_CSV_DIR)} "
+    f"--output-dir {quote(READY_DIR)} "
+    f"--training-output-name {quote(RETRAINING_OUTPUT_NAME)} "
+    f"--feature-window-minutes {quote(FEATURE_WINDOW_MINUTES)} "
+    f"--seq-len {quote(EXPECTED_SEQ_LEN)} "
+    f"--sequence-stride {quote(SEQUENCE_STRIDE)} "
+    f"--max-horizon-hours {quote(MAX_HORIZON_HOURS)} "
+    f"--entropy-bins {quote(ENTROPY_BINS)} "
+    f"--n-classes {quote(TRAINING_N_CLASSES)} "
+    f"--split-strategy {quote(SPLIT_STRATEGY)} "
+    f"--train-ratio {quote(TRAIN_RATIO)} "
+    f"--val-ratio {quote(VAL_RATIO)}"
+)
+
+RETRAINING_NPZ_PATH = str(Path(READY_DIR) / RETRAINING_OUTPUT_NAME)
+
+validate_retraining_dataset_command = project_bash(
+    "python -m src.retraining.validate_retraining_dataset "
+    f"--npz-path {quote(RETRAINING_NPZ_PATH)} "
+    f"--expected-seq-len {quote(EXPECTED_SEQ_LEN)} "
+    f"--expected-n-features {quote(EXPECTED_N_FEATURES)} "
+    f"--n-classes {quote(TRAINING_N_CLASSES)} "
+    f"--output-json {quote(RETRAINING_GX_VALIDATION_OUTPUT_JSON)}"
+)
+
+
 default_args = {
     "owner": "vulcadata",
     "depends_on_past": False,
@@ -489,9 +723,24 @@ with DAG(
     start_date=datetime(2026, 6, 17),
     schedule_interval=None,
     catchup=False,
-    tags=["vulcadata", "retraining", "conditional"],
+    tags=["vulcadata", "retraining", "conditional", "great-expectations"],
 ) as dag:
     start = EmptyOperator(task_id="start")
+
+    check_retraining_csv_inputs = PythonOperator(
+        task_id="check_retraining_csv_inputs",
+        python_callable=build_retraining_periods_file,
+    )
+
+    preprocess_retraining_dataset = BashOperator(
+        task_id="preprocess_retraining_dataset",
+        bash_command=preprocess_retraining_dataset_command,
+    )
+
+    validate_retraining_dataset = BashOperator(
+        task_id="validate_retraining_dataset",
+        bash_command=validate_retraining_dataset_command,
+    )
 
     detect_and_merge_ready_files = PythonOperator(
         task_id="detect_and_merge_ready_files",
@@ -607,7 +856,14 @@ python -m src.retraining.log_retraining_decision_to_mlflow \
         trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
     )
 
-    start >> detect_and_merge_ready_files >> branch_should_retrain
+    (
+        start
+        >> check_retraining_csv_inputs
+        >> preprocess_retraining_dataset
+        >> validate_retraining_dataset
+        >> detect_and_merge_ready_files
+        >> branch_should_retrain
+    )
     branch_should_retrain >> skip_retraining >> end
     (
         branch_should_retrain
