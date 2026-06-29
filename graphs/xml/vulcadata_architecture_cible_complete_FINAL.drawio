@@ -1,0 +1,352 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0">
+  <diagram id="vulcadata-seq" name="Vulcadata Sequential Architecture">
+    <mxGraphModel dx="2575" dy="1515" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1080" background="light-dark(#FFFFFF,#2A2A2A)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=18;fontStyle=1;fillColor=#ffffff;strokeColor=#222222;" value="&lt;font style=&quot;font-size: 34px;&quot;&gt;VulcaData : prédiction d&#39;alerte volcanique&lt;br&gt;Architecture cible MLOps (ELT → ML runtime → monitoring &amp;amp; traçabilité → serving)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="1920" x="40" y="-60" as="geometry" />
+        </mxCell>
+        <mxCell id="trig_schedule" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#fff3e0;strokeColor=#fb8c00;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Schedule&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="150" x="-173" y="351" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#ffffff;strokeColor=#999999;fontStyle=0;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Légende des flèches&lt;br&gt;Bleu : données&lt;br&gt;Violet : modèle / artefacts&lt;br&gt;Gris pointillé : CI/CD&lt;br&gt;Orange pointillé : trigger / backfill&lt;br&gt;Bleu foncé : monitoring&lt;br&gt;Rouge : approbation humaine&lt;/font&gt;" vertex="1">
+          <mxGeometry height="235" width="393" x="-385" y="-45" as="geometry" />
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-1" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="150" width="1920" x="40" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_etl" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;ELT&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="api_piton" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;API Observatoire&lt;br&gt;Piton de la Fournaise&lt;/font&gt;" vertex="1">
+          <mxGeometry height="72" width="175" x="19" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="airflow_extract" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Airflow&lt;br&gt;extraction incrémentale&lt;/font&gt;" vertex="1">
+          <mxGeometry height="78" width="187" x="328" y="49" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_raw" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;S3&lt;br&gt;Raw MiniSEED&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="108" x="626" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="preproc" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Snowflake RAW&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;staging / external stage&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;données chargées&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="98" width="177" x="750" y="33" as="geometry" />
+        </mxCell>
+        <mxCell id="dq_tests" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Transformations ELT&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;agrégation 1 min&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;features sismiques&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;fenêtres temporelles&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="99" width="165" x="1023" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="neon_features" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Snowflake Data Warehouse&lt;br&gt;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;features validées&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;prédictions historisées&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;datasets analyse / ML&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="118" width="220" x="1692" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="d1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="airflow_extract" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;" target="api_piton" value="1 requête API">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="api_piton" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="airflow_extract" value="2 réponse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="airflow_extract" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="s3_raw" value="3 write raw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="s3_raw" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="preproc" value="4 ingestion raw">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="14" />
+              <mxPoint x="834" y="10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d5" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="preproc" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="dq_tests" value="5 tables raw">
+          <mxGeometry relative="1" x="0.0314" y="8" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="839" y="146" />
+              <mxPoint x="1106" y="145" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d6" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="dq_tests" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="5FAWYDLG6cKoZYX0nTK5-1" value="6 features candidats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5FAWYDLG6cKoZYX0nTK5-1" parent="AiJJDw_yQkqw_xYPsAhY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Data Quality&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Great Expectations&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;schéma / valeurs&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="105" width="147" x="1378" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="5FAWYDLG6cKoZYX0nTK5-4" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-1" source="5FAWYDLG6cKoZYX0nTK5-1" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="neon_features" value="7 features validées">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1651" y="77" as="sourcePoint" />
+            <mxPoint x="1843" y="76" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-2" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="150" width="1920" x="40" y="980" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_ui" parent="AiJJDw_yQkqw_xYPsAhY-2" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Serving&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="hf_streamlit" parent="AiJJDw_yQkqw_xYPsAhY-2" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Hugging Face Space&lt;br&gt;Streamlit App&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="20" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dashboard" parent="AiJJDw_yQkqw_xYPsAhY-2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Dashboard Streamlit&lt;br&gt;visualisation&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="260" x="462" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-2" source="hf_streamlit" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="dashboard" value=" 24 sert l&#39;UI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-3" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="185" width="1920" x="40" y="738" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_mon" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#e8eaf6;strokeColor=#3f51b5;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Monitoring &amp;amp; traçabilité&lt;/font&gt;" vertex="1">
+          <mxGeometry height="185" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="evidently" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Evidently&lt;br&gt;reports &amp;amp; metrics&lt;/font&gt;" vertex="1">
+          <mxGeometry height="88.80000000000001" width="147" x="110" y="45.00333333333333" as="geometry" />
+        </mxCell>
+        <mxCell id="evid_s3" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;S3&lt;br&gt;rapports Evidently&lt;br&gt;(HTML / JSON)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="113.46666666666668" width="157" x="410" y="33" as="geometry" />
+        </mxCell>
+        <mxCell id="evid_neon" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Snowflake Monitoring&lt;br&gt;métriques Evidently&lt;br&gt;résumés drift&lt;/font&gt;" vertex="1">
+          <mxGeometry height="111" width="202" x="607" y="36.00333333333334" as="geometry" />
+        </mxCell>
+        <mxCell id="mlflow" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;MLflow Tracking Server&lt;br&gt;(Hugging Face)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82.63333333333334" width="152" x="1273" y="56.00333333333334" as="geometry" />
+        </mxCell>
+        <mxCell id="mlflow_backend" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Neon PostgreSQL&lt;br&gt;backend store MLflow&lt;/font&gt;" vertex="1">
+          <mxGeometry height="102.36666666666666" width="170" x="1533" y="43.00333333333333" as="geometry" />
+        </mxCell>
+        <mxCell id="mlflow_artifacts" parent="AiJJDw_yQkqw_xYPsAhY-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;S3&lt;br&gt;artefacts MLflow&lt;/font&gt;" vertex="1">
+          <mxGeometry height="92.5" width="142" x="1741" y="44.400000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="mo2" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-3" source="evidently" style="endArrow=block;strokeWidth=2;strokeColor=#3f51b5;fontSize=16;" target="evid_s3" value="19 stocke rapports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mo3" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-3" source="evidently" style="endArrow=block;strokeWidth=2;strokeColor=#3f51b5;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=16;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="evid_neon" value="20 stocke résumé">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="184" y="166" />
+              <mxPoint x="708" y="166" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ml1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-3" source="mlflow" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="mlflow_backend" value="metadata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml2" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-3" source="mlflow" style="endArrow=block;strokeWidth=2;strokeColor=#9b59b6;fontSize=16;" target="mlflow_artifacts" value="artefacts">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1349" y="201" />
+              <mxPoint x="1811" y="201" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-5" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="170" width="1920" x="40" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-4" connectable="0" parent="AiJJDw_yQkqw_xYPsAhY-5" style="group" value="" vertex="1">
+          <mxGeometry height="170" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_ml" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#fce4ec;strokeColor=#ad1457;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;ML runtime&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="hf_model" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;MLflow Model Registry&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;champion / challenger&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;promotion / rollback&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="105" width="190" x="311" y="51" as="geometry" />
+        </mxCell>
+        <mxCell id="airflow_infer" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Airflow&lt;br&gt;inference job&lt;/font&gt;" vertex="1">
+          <mxGeometry height="79.33333333333334" width="125" x="562" y="58.00333333333333" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_preds" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;S3&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;latest predictions&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;dashboard input&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="88.4" width="173" x="1064" y="53" as="geometry" />
+        </mxCell>
+        <mxCell id="drift_detect" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Drift detection&lt;br&gt;(Evidently)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="65.73333333333333" width="143" x="1330" y="53" as="geometry" />
+        </mxCell>
+        <mxCell id="drift_decision" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Drift ?&lt;/font&gt;" vertex="1">
+          <mxGeometry height="79.33333333333334" width="90" x="1593" y="44.99999999999999" as="geometry" />
+        </mxCell>
+        <mxCell id="train_job" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Training job candidat&lt;br&gt;fine-tuning&lt;br&gt;via Airflow&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="160" x="1725" y="41" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="hf_model" style="endArrow=block;strokeWidth=2;strokeColor=#9b59b6;fontSize=16;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="airflow_infer" value="9 charge champion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="456" y="31" />
+              <mxPoint x="593" y="31" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="5FAWYDLG6cKoZYX0nTK5-5" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="s3_preds" value="11 stockage denières preds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="793" y="24" />
+              <mxPoint x="1107" y="24" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="s3_preds" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;" target="drift_detect" value="12 monitor preds/features">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1153" y="16" />
+              <mxPoint x="1401" y="16" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="drift_detect" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="drift_decision" value="13 drift score">
+          <mxGeometry relative="1" x="0.1289" y="-24" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="drift_decision" style="endArrow=block;strokeWidth=2;strokeColor=#fb8c00;dashed=1;fontSize=16;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="train_job" value="14 déclenche retraining">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1638" y="23" />
+              <mxPoint x="1805" y="23" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r5" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="train_job" style="endArrow=block;strokeWidth=2;strokeColor=#9b59b6;entryX=0.47;entryY=0.03;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;fontSize=16;" target="hf_model" value="15 enregistre candidat">
+          <mxGeometry relative="1" x="-0.0027" y="11" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1845" y="-23" />
+              <mxPoint x="400" y="-29" />
+            </Array>
+            <mxPoint x="1680" y="34" as="sourcePoint" />
+            <mxPoint x="340" y="22.666666666666668" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5FAWYDLG6cKoZYX0nTK5-5" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Sorties inférence&lt;br&gt;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;p_alert_24h&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;JSON / Parquet&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="79.33333333333334" width="155" x="715" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="5FAWYDLG6cKoZYX0nTK5-6" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="airflow_infer" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="5FAWYDLG6cKoZYX0nTK5-5" value="10 écrit prédictions">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="625" y="153" />
+              <mxPoint x="793" y="153" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="human_approve" parent="AiJJDw_yQkqw_xYPsAhY-4" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=#ffebee;strokeColor=#c62828;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Validation humaine&lt;br&gt;approbation promotion&lt;/font&gt;" vertex="1">
+          <mxGeometry height="88" width="190" x="25" y="53" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="human_approve" style="endArrow=block;strokeWidth=2;strokeColor=#c62828;fontSize=16;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="hf_model" value="17 valide promotion">
+          <mxGeometry relative="1" x="-0.0341" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="120" y="180" />
+              <mxPoint x="406" y="177" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r6_request_approval" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-4" source="hf_model" style="endArrow=block;strokeWidth=2;strokeColor=#c62828;dashed=1;fontSize=16;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="human_approve" value="16 demande validation">
+          <mxGeometry relative="1" x="-0.0029" y="13" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="361" y="20" />
+              <mxPoint x="120" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s2" edge="1" parent="1" source="s3_preds" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="hf_streamlit" value="23 lit dernières preds">
+          <mxGeometry relative="1" x="-0.0499" y="11" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1191" y="688" />
+              <mxPoint x="116" y="688" />
+              <mxPoint x="116" y="959" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mo1" edge="1" parent="1" source="drift_detect" style="endArrow=block;strokeWidth=2;strokeColor=#3f51b5;fontSize=16;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="evidently" value="18 report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1338" y="586" />
+              <mxPoint x="1338" y="720" />
+              <mxPoint x="224" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r3" edge="1" parent="1" source="train_job" style="endArrow=block;strokeWidth=2;strokeColor=#9b59b6;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;fontSize=16;" target="mlflow" value="21 enregistre run">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1805" y="724" />
+              <mxPoint x="1427" y="724" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r4" edge="1" parent="1" source="train_job" style="endArrow=block;strokeWidth=2;strokeColor=#9b59b6;fontSize=16;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="mlflow_artifacts" value="22 artefacts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" source="neon_features" style="endArrow=block;strokeWidth=2;strokeColor=#4a90e2;fontSize=16;" target="airflow_infer" value="8 read batch">
+          <mxGeometry relative="1" x="-0.169" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1843" y="460" />
+              <mxPoint x="1130" y="460" />
+              <mxPoint x="667" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t1" edge="1" parent="1" source="trig_schedule" style="endArrow=block;strokeWidth=2;strokeColor=#fb8c00;dashed=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" target="airflow_extract" value="T1 schedule → extract">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-98" y="250" />
+              <mxPoint x="461" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AiJJDw_yQkqw_xYPsAhY-6" connectable="0" parent="1" style="group;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="150" width="1920" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_cicd" parent="AiJJDw_yQkqw_xYPsAhY-6" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontStyle=1;fillColor=light-dark(#EEEEEE,#365339);strokeColor=#666666;" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;CI/CD&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="1920" as="geometry" />
+        </mxCell>
+        <mxCell id="gh_actions" parent="AiJJDw_yQkqw_xYPsAhY-6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;GitHub Actions&lt;br&gt;Tests • Build images • Déploiement contrôlé&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="260" x="658" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="deploy_airflow" parent="AiJJDw_yQkqw_xYPsAhY-6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Airflow sur Kubernetes&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Docker + Helm&lt;br data-start=&quot;1264&quot; data-end=&quot;1267&quot;&gt;scheduler / workers / DAGs&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="105" width="174" x="249" y="24" as="geometry" />
+        </mxCell>
+        <mxCell id="deploy_hf" parent="AiJJDw_yQkqw_xYPsAhY-6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#444444;" value="&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Déploiement&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Streamlit + MLflow&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="1166" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-6" source="gh_actions" style="endArrow=block;strokeWidth=2;strokeColor=#666666;dashed=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" target="deploy_hf" value="déploiement">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="788" y="20" />
+              <mxPoint x="1276" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c1" edge="1" parent="AiJJDw_yQkqw_xYPsAhY-6" source="gh_actions" style="endArrow=block;strokeWidth=2;strokeColor=#666666;dashed=1;fontSize=16;" target="deploy_airflow" value="build image +&#xa;déploiement Helm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" edge="1" parent="1" source="deploy_airflow" style="endArrow=block;strokeWidth=2;strokeColor=#666666;dashed=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;fontSize=16;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" target="airflow_extract" value="DAGs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="423" y="213" />
+              <mxPoint x="508" y="213" />
+            </Array>
+            <mxPoint x="480" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c5" edge="1" parent="1" source="deploy_hf" style="endArrow=block;strokeWidth=2;strokeColor=#666666;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=16;" target="mlflow" value="server">
+          <mxGeometry relative="1" x="-0.5016" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1991" y="155" />
+              <mxPoint x="1998" y="690" />
+              <mxPoint x="1392" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4" edge="1" parent="1" source="deploy_hf" style="endArrow=block;strokeWidth=2;strokeColor=#666666;dashed=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontSize=16;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="hf_streamlit" value="app">
+          <mxGeometry relative="1" x="-0.588" y="3" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2029" y="133" />
+              <mxPoint x="2040" y="955" />
+              <mxPoint x="225" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

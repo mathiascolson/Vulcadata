@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="vulcadata-slide6-airflow" name="Slide 6 - Airflow">
+    <mxGraphModel dx="1488" dy="763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="subtitle" parent="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=light-dark(#000000,#152116);" value="Deux DAGs structurent l’inférence opérationnelle et le réentraînement conditionnel" vertex="1">
+          <mxGeometry height="25" width="780" x="250" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="airflowContainer" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#647687;strokeColor=#314354;strokeWidth=2;arcSize=10;fontColor=#ffffff;" value="" vertex="1">
+          <mxGeometry height="535" width="1190" x="45" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="airflowLabel" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#2b2500;strokeColor=#8a6f00;strokeWidth=2;fontColor=#ffffff;fontSize=20;fontStyle=1;align=center;verticalAlign=middle;" value="Airflow" vertex="1">
+          <mxGeometry height="52" width="180" x="550" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="airflowSub" parent="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontColor=#c9d1d9;" value="orchestrateur des tâches Data &amp; ML" vertex="1">
+          <mxGeometry height="22" width="290" x="495" y="172" as="geometry" />
+        </mxCell>
+        <mxCell id="lane1bg" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#142033;strokeColor=#355d94;strokeWidth=1.5;arcSize=8;" value="" vertex="1">
+          <mxGeometry height="145" width="1140" x="70" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="lane1label" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#1f4e79;strokeColor=#6fa8dc;strokeWidth=1.5;fontColor=#ffffff;fontSize=15;fontStyle=1;align=center;verticalAlign=middle;" value="DAG d’inférence" vertex="1">
+          <mxGeometry height="38" width="155" x="85" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="lane2bg" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#1a1829;strokeColor=#7e57c2;strokeWidth=1.5;arcSize=8;" value="" vertex="1">
+          <mxGeometry height="150" width="1140" x="70" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="lane2label" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#4a2f7a;strokeColor=#b388ff;strokeWidth=1.5;fontColor=#ffffff;fontSize=15;fontStyle=1;align=center;verticalAlign=middle;" value="DAG de réentraînement" vertex="1">
+          <mxGeometry height="38" width="180" x="85" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="infData" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e8f1ff;strokeColor=#4a86c5;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Données locales&#xa;CSV agrégés" vertex="1">
+          <mxGeometry height="52" width="125" x="100" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="infPrep" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e7f4e4;strokeColor=#6aa84f;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Preprocessing&#xa;inférence" vertex="1">
+          <mxGeometry height="52" width="125" x="266" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="infBatch" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e7f4e4;strokeColor=#6aa84f;strokeWidth=2;fontColor=#111827;fontSize=12;align=center;verticalAlign=middle;arcSize=8;" value="latest_batch.npz&#xa;(1, 120, 992)" vertex="1">
+          <mxGeometry height="52" width="135" x="432" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="infGX" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontColor=#111827;fontSize=12;align=center;verticalAlign=middle;arcSize=8;" value="Validation GX" vertex="1">
+          <mxGeometry height="52" width="145" x="609" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="infModel" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#9e9e9e;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="CNN-Transformer&#xa;inférence" vertex="1">
+          <mxGeometry height="52" width="135" x="824" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="infOut" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fce5cd;strokeColor=#e69138;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Prédictions&#xa;p_alert_24h" vertex="1">
+          <mxGeometry height="52" width="135" x="995" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="retData" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e8f1ff;strokeColor=#4a86c5;strokeWidth=2;fontColor=#111827;fontSize=12;align=center;verticalAlign=middle;arcSize=8;" value="Données locales&#xa;hors inference" vertex="1">
+          <mxGeometry height="52" width="125" x="100" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="retPrep" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e7f4e4;strokeColor=#6aa84f;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Preprocessing&#xa;training" vertex="1">
+          <mxGeometry height="52" width="125" x="262" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="retDataset" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e7f4e4;strokeColor=#6aa84f;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Dataset candidat&#xa;NPZ" vertex="1">
+          <mxGeometry height="52" width="135" x="431" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="retGX" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontColor=#111827;fontSize=12;align=center;verticalAlign=middle;arcSize=8;" value="Validation GX&#xa;train / val / test" vertex="1">
+          <mxGeometry height="52" width="145" x="609" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="retTrain" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#eadcf8;strokeColor=#8e7cc3;strokeWidth=2;fontColor=#111827;fontSize=13;align=center;verticalAlign=middle;arcSize=8;" value="Entraînement&#xa;candidat" vertex="1">
+          <mxGeometry height="52" width="135" x="810" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="retDecision" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fce5cd;strokeColor=#e69138;strokeWidth=2;fontColor=#111827;fontSize=12;align=center;verticalAlign=middle;arcSize=8;" value="Comparaison&#xa;promotion / rejet" vertex="1">
+          <mxGeometry height="52" width="145" x="990" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17351c;strokeColor=#4c8c50;strokeWidth=2;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=10;" value="AWS S3&#xa;prédictions récentes&#xa;rapports Evidently&#xa;artefacts opérationnels" vertex="1">
+          <mxGeometry height="88" width="170" x="680" y="356" as="geometry" />
+        </mxCell>
+        <mxCell id="mlflow" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#3b2a00;strokeColor=#b88700;strokeWidth=2;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=10;" value="MLflow&#xa;runs / métriques&#xa;décisions" vertex="1">
+          <mxGeometry height="68" width="170" x="977.5" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="evidently" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#20283a;strokeColor=#6b7fd7;strokeWidth=2;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=10;" value="Evidently&#xa;rapports monitoring&#xa;data drift / feature drift" vertex="1">
+          <mxGeometry height="68" width="190" x="403.5" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="takeaway" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e7f7ed;strokeColor=#00b050;strokeWidth=2;fontColor=#111827;fontSize=15;align=center;verticalAlign=middle;arcSize=8;" value="Airflow intervient après l&#39;extraction locale ; il rend les traitements reproductibles, validés et traçables." vertex="1">
+          <mxGeometry height="40" width="780" x="250" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="infData" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="infPrep" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="infPrep" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="infBatch" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="infBatch" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="infGX" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="infGX" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="infModel" value="si valide">
+          <mxGeometry relative="1" x="0.0286" y="6" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="infModel" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="infOut" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" edge="1" parent="1" source="retData" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="retPrep" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" edge="1" parent="1" source="retPrep" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="retDataset" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" edge="1" parent="1" source="retDataset" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="retGX" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" edge="1" parent="1" source="retGX" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="retTrain" value="si valide">
+          <mxGeometry relative="1" x="-0.0714" y="16" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r5" edge="1" parent="1" source="retTrain" style="endArrow=block;html=0;rounded=0;strokeColor=#9ca3af;strokeWidth=2;" target="retDecision" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="out1" edge="1" parent="1" source="infOut" style="endArrow=block;html=0;rounded=0;strokeColor=#4a86c5;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="s3" value="écriture sorties">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="out2" edge="1" parent="1" source="retDecision" style="endArrow=block;html=0;rounded=0;strokeColor=#8e7cc3;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="s3" value="artefacts / décision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ml1" edge="1" parent="1" source="infOut" style="endArrow=block;html=0;rounded=0;strokeColor=#b88700;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="mlflow" value="log inférence">
+          <mxGeometry relative="1" x="-0.3" y="-2" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="1060" y="330" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ml2" edge="1" parent="1" source="retDecision" style="endArrow=block;html=0;rounded=0;strokeColor=#b88700;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="mlflow" value="log entraînement">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ev1" edge="1" parent="1" source="infBatch" style="endArrow=block;html=0;rounded=0;strokeColor=#6b7fd7;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="evidently" value="rapport drift">
+          <mxGeometry relative="1" x="-0.3634" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ev2" edge="1" parent="1" source="retDataset" style="endArrow=block;html=0;rounded=0;strokeColor=#6b7fd7;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="evidently" value="rapport dataset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ev3" edge="1" parent="1" source="evidently" style="endArrow=block;html=0;rounded=0;strokeColor=#6b7fd7;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;labelBackgroundColor=none;" target="s3" value="rapports">
+          <mxGeometry relative="1" x="0.0793" y="12" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2vOs3_sl6iEmXglV6HiU-1" edge="1" parent="1" source="mlflow" style="endArrow=block;html=0;rounded=0;strokeColor=#b88700;strokeWidth=2;fontColor=#c9d1d9;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=none;" target="s3" value="artefacts MLflow">
+          <mxGeometry relative="1" x="0.0647" y="-12" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <mxPoint x="920" y="532" as="sourcePoint" />
+            <mxPoint x="920" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

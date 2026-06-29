@@ -1,0 +1,159 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0">
+  <diagram id="vulcadata-diagram" name="Vulcadata Architecture" compressed="false">
+    <mxGraphModel dx="3188" dy="1713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ga" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#666666;fontSize=14;fontStyle=1" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;GitHub Actions&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;CI&amp;nbsp;&lt;/font&gt;—&amp;nbsp;&lt;font style=&quot;font-size: 16px;&quot;&gt;tests &amp;amp; validation&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;DAGs / scripts&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="200" x="-290" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="airflow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Airflow&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Workflow Orchestrator&lt;br&gt;(orchestration Data &amp;amp; ML)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="160" width="235" x="27.5" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="aws" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13" value="&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;AWS S3&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;artefacts MLflow&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;artefacts modèle courant&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;rapports Evidently&lt;br&gt;prédictions récentes&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="160" width="240" x="690" as="geometry" />
+        </mxCell>
+        <mxCell id="neon" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Neon PostgreSQL&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;MLflow backend&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="190" x="350" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="hf" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13" value="&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;HuggingFace&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;MLflow Server&lt;br&gt;Streamlit App&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="235" x="695" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="evid" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontSize=13;fontStyle=1" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Evidently&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Monitoring / Drift&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="320" x="-15" y="-10" as="geometry" />
+        </mxCell>
+        <mxCell id="dash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Streamlit&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&amp;nbsp;Dashboard&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="702.5" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="ga" style="endArrow=block;dashed=1;strokeColor=#666666" target="airflow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-19" connectable="0" parent="e1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;tests DAGs / scripts&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0044" y="1" as="geometry">
+            <mxPoint x="-32" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="airflow" style="endArrow=block;strokeColor=#4a90e2;fontSize=14;" target="aws" value="preds / artefacts / rapports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="airflow" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;" target="8anuB4jiKwnWvCvIKf26-1" value="charge le modèle et &#xa;lance l&#39;inférence">
+          <mxGeometry relative="1" x="0.0195" y="40" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="430" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="hf" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;exitX=-0.004;exitY=0.85;exitDx=0;exitDy=0;exitPerimeter=0;" target="neon" value="backend store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="hf" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;" target="aws" value="artefact store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="airflow" style="endArrow=block;strokeColor=#3f51b5;fontSize=14;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="evid" value="rapports de monitoring">
+          <mxGeometry relative="1" x="0.1429" y="8" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="evid" style="endArrow=block;strokeColor=#3f51b5;fontSize=14;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="aws" value="rapports Evidently">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="hf" style="endArrow=block;strokeColor=#e67e22" target="dash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-20" connectable="0" parent="e9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Héberge l&#39;application&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.3188" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=0;" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Modèle CNN-Transformer&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Code local + Artefact courant&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Chargé par Airflow&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="115" width="250" x="370" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-2" edge="1" parent="1" source="airflow" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;exitX=0.871;exitY=0.994;exitDx=0;exitDy=0;exitPerimeter=0;" target="hf" value="log runs/metric/décisions">
+          <mxGeometry relative="1" x="0.5384" y="22" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="360" y="500" />
+            </Array>
+            <mxPoint x="660" y="420" as="sourcePoint" />
+            <mxPoint x="697" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-3" edge="1" parent="1" source="aws" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="8anuB4jiKwnWvCvIKf26-1" value="artefact modèle courant">
+          <mxGeometry relative="1" x="-0.6235" y="-30" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="750" y="320" />
+            </Array>
+            <mxPoint x="680" y="270" as="sourcePoint" />
+            <mxPoint x="722" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-4" edge="1" parent="1" source="aws" style="endArrow=block;strokeColor=#9b59b6;fontSize=14;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="dash" value="dernière prédiction">
+          <mxGeometry relative="1" x="-0.1519" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="980" y="80" />
+              <mxPoint x="980" y="680" />
+            </Array>
+            <mxPoint x="970" y="250" as="sourcePoint" />
+            <mxPoint x="890" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1" value="&lt;div&gt;Données locales&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;data/extraction/processed_csv/&lt;/div&gt;&lt;div&gt;CSV agrégés&lt;/div&gt;&lt;div&gt;NPZ&lt;/div&gt;&lt;div&gt;datasets candidats&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="235" x="27.5" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1" value="&lt;div&gt;API observatoire volcanologique du Piton de la Fournaise&lt;/div&gt;" vertex="1">
+          <mxGeometry height="65" width="235" x="27.5" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-9" edge="1" parent="1" source="8anuB4jiKwnWvCvIKf26-6" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="8anuB4jiKwnWvCvIKf26-5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-283" y="100" as="sourcePoint" />
+            <mxPoint x="-110" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-10" connectable="0" parent="8anuB4jiKwnWvCvIKf26-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Extraction MiniSEED + agrégation CSV&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0088" y="-3" as="geometry">
+            <mxPoint x="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-11" edge="1" parent="1" source="8anuB4jiKwnWvCvIKf26-5" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;" target="airflow" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="80" y="390" as="sourcePoint" />
+            <mxPoint x="148" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-12" connectable="0" parent="8anuB4jiKwnWvCvIKf26-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;entrée des DAGS&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0088" y="-3" as="geometry">
+            <mxPoint x="-9" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-13" edge="1" parent="1" source="airflow" style="endArrow=block;dashed=1;strokeColor=#666666;entryX=0.75;entryY=0;entryDx=0;entryDy=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" target="8anuB4jiKwnWvCvIKf26-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="330" as="sourcePoint" />
+            <mxPoint x="200" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-15" connectable="0" parent="8anuB4jiKwnWvCvIKf26-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="NPZ/batchs/archives" vertex="1">
+          <mxGeometry relative="1" x="-0.0961" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;fontSize=13;fontStyle=1" value="&lt;div&gt;Great Expectations&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Validation bloquante&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="340" x="-380" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="8anuB4jiKwnWvCvIKf26-18" edge="1" parent="1" source="airflow" style="endArrow=block;strokeColor=#3f51b5;fontSize=14;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="8anuB4jiKwnWvCvIKf26-17" value="validation batch / dataset">
+          <mxGeometry relative="1" x="-0.1351" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="-210" y="200" />
+            </Array>
+            <mxPoint x="43" y="470" as="sourcePoint" />
+            <mxPoint x="-50" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
