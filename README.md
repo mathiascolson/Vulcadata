@@ -1,169 +1,274 @@
 # VulcaData
 
-Prédiction d'alerte volcanique à partir des signaux sismiques du Piton de la Fournaise.
+Projet de prédiction d’alerte volcanique appliqué au Piton de la Fournaise.
 
-VulcaData transforme des données MiniSEED en séquences temporelles exploitables par un modèle de Deep Learning, puis orchestre l'inférence, la validation des données, le monitoring et le suivi des modèles dans une chaîne MLOps.
+VulcaData vise à exploiter des signaux sismiques collectés auprès de l’observatoire volcanologique du Piton de la Fournaise afin d’estimer un niveau d’alerte volcanique.
 
-Ce dépôt documente l'état du projet présenté dans le cadre des certifications **CDSD** et **AIA**. Les évolutions envisagées après ces certifications sont regroupées dans une roadmap distincte et ne sont pas présentées comme déjà réalisées.
+Le projet met en place une chaîne MLOps orchestrée à partir de données sismiques extraites localement : transformation des signaux, feature engineering, preprocessing, entraînement de modèles, inférence, validation qualité, monitoring, traçabilité des décisions modèle et visualisation des résultats.
 
-## Résultats clés
+## Objectif du projet
 
-Le CNN-Transformer retenu produit six classes temporelles, mais la décision opérationnelle se concentre sur un objectif plus robuste : détecter une situation d'alerte à 24 heures.
+L’objectif est de transformer des signaux sismiques bruts en indicateurs exploitables, puis d’utiliser un modèle de classification pour estimer le niveau d’alerte associé à une séquence temporelle récente.
 
-| Métrique sur le jeu de test | Résultat |
-|---|---:|
-| F1 — alerte à 24 h | **0,720** |
-| Recall — alerte à 24 h | **0,816** |
-| Precision — alerte à 24 h | **0,644** |
-| Seuil de décision | **0,35** |
+Le modèle opérationnel retourne une classe d’alerte parmi 6 niveaux :
 
-La probabilité d'alerte à 24 heures est définie par :
+* classe 0 : période calme ou non critique ;
+* classes 1 à 2 : activité pré-éruptive éloignée ;
+* classes 3 à 5 : activité pré-éruptive plus proche, utilisée pour le calcul de l’alerte à 24 heures.
 
-`p_alert_24h = P(classe 3) + P(classe 4) + P(classe 5)`
+La probabilité d’alerte à 24 heures est calculée en additionnant les probabilités des classes 3, 4 et 5.
 
-Le recall élevé privilégie la détection des épisodes à risque, au prix d'un nombre plus important de faux positifs. Ces valeurs proviennent de [`configs/final_model_decision.json`](configs/final_model_decision.json).
+## Référence scientifique
 
-### Limite importante du modèle
+Le projet s’appuie fortement sur l’étude suivante :
 
-Les performances ne sont pas homogènes sur les six classes : le **macro-F1 multiclasse est d'environ 0,110** et la **balanced accuracy d'environ 0,192** sur le jeu de test. Certaines classes intermédiaires ne sont pas correctement distinguées.
+Characterization of volcanic stages using seismic features: Case of Tajogaite (2021) and Colima (2013–2022), publiée en 2025.
 
-Le modèle ne doit donc pas être interprété comme un classifieur multiclasse généraliste performant. Il a été retenu pour le sous-objectif métier d'alerte binaire à 24 heures, nettement plus exploitable. Une régression du délai avant éruption est conservée comme estimation exploratoire, pas comme prédiction opérationnelle fiable.
+Cette étude a servi de base méthodologique pour l’extraction de caractéristiques sismiques permettant de différencier plusieurs phases d’activité volcanique. VulcaData adapte cette approche au cas du Piton de la Fournaise.
 
-## Périmètre implémenté
+Plusieurs features utilisées dans le projet sont directement inspirées de cette approche, notamment :
 
-Les éléments suivants sont présents dans le dépôt :
+* la kurtosis, utilisée pour caractériser la forme statistique du signal ;
+* l’entropie de Shannon, utilisée pour mesurer la complexité ou la dispersion de l’information dans le signal ;
+* le Frequency Index, utilisé pour comparer l’énergie contenue dans différentes bandes de fréquences.
 
-- extraction manuelle des signaux MiniSEED depuis l'API FDSN de l'Observatoire volcanologique du Piton de la Fournaise ;
-- nettoyage, agrégation et feature engineering des signaux sismiques ;
-- création de séquences temporelles de forme `(120, 992)` ;
-- modèle CNN-Transformer de classification à six classes et règle d'alerte à 24 heures ;
-- pipeline d'inférence orchestré par Airflow ;
-- pipeline de réentraînement conditionnel avec comparaison champion/candidat ;
-- validation des données avec Great Expectations ;
-- rapports de monitoring avec Evidently ;
-- traçabilité des expériences, métriques et décisions avec MLflow ;
-- stockage S3 des sorties légères utilisées par le dashboard ;
-- tests automatisés et intégration continue avec GitHub Actions.
+Ces indicateurs sont centraux dans l'étude de référence et permettent de résumer des signaux sismiques complexes sous forme de variables exploitables par les modèles de Machine Learning et de Deep Learning.
 
-La présence de ces composants et de leurs tests permet d'en examiner l'implémentation. Elle ne constitue pas, à elle seule, la preuve d'une exécution de bout en bout contre les services externes S3 et MLflow dans un nouvel environnement.
 
-## Objectif et données
+## Source des données
 
-Les signaux sont collectés via l'API FDSN de l'observatoire :
+Les données sismiques sont collectées directement auprès de l’API de l’observatoire volcanologique du Piton de la Fournaise :
 
-<https://ws.ipgp.fr/fdsnws/dataselect/1>
+https://ws.ipgp.fr/fdsnws/dataselect/1
 
-Le périmètre temporel, les stations et les canaux sont définis dans [`data/metadata/extraction_periods.csv`](data/metadata/extraction_periods.csv). L'extraction, lancée manuellement en amont d'Airflow, produit des CSV agrégés dans `data/extraction/processed_csv/`.
+Les données brutes sont récupérées au format MiniSEED sur le réseau de stations sismiques du Piton de la Fournaise. Elles sont ensuite transformées en séries temporelles agrégées, puis en séquences exploitables par les modèles de Deep Learning.
 
-Les principales familles de variables sont :
+Le périmètre des périodes utilisées par le projet est défini dans le fichier :
 
-- amplitudes et énergie dans différentes bandes de fréquences ;
-- indice fréquentiel ;
-- entropie de Shannon ;
-- kurtosis ;
-- statistiques glissantes ;
-- indicateurs agrégés par station et par canal.
+`data/metadata/extraction_periods.csv`
 
-La méthodologie de feature engineering s'inspire notamment de l'étude *Characterization of volcanic stages using seismic features: Case of Tajogaite (2021) and Colima (2013–2022)*, publiée en 2025, puis l'adapte au Piton de la Fournaise.
+## Pipeline de données
+
+Le pipeline de données se décompose en deux niveaux.
+
+Dans la version actuelle, en amont d'Airflow, l’extraction des fichiers MiniSEED depuis l’API de l’observatoire est lancée manuellement via un script dédié.
+
+Ce script lit le fichier :
+
+`data/metadata/extraction_periods.csv`
+
+Ce fichier fournit les informations nécessaires pour construire les requêtes vers l’API FDSN : périodes temporelles, type de période, réseau, stations et canaux sismiques.
+
+L’extraction produit ensuite des CSV agrégés dans :
+
+`data/extraction/processed_csv/`
+
+Les DAGs Airflow prennent ensuite le relais à partir de ces CSV agrégés. Ils orchestrent le preprocessing, la construction des séquences temporelles, la validation qualité et les traitements MLOps associés à l’inférence ou au réentraînement.
+
+Les principales étapes sont :
+
+* définition des périodes à traiter dans `extraction_periods.csv` ;
+* extraction manuelle des signaux MiniSEED via le script dédié ;
+* filtrage, nettoyage et agrégation temporelle des signaux ;
+* extraction de caractéristiques sismiques ;
+* preprocessing orchestré par Airflow selon le cas d’usage ;
+* construction de séquences temporelles au format (120, 992) ;
+* validation qualité avec Great Expectations ;
+* inférence ou entraînement d’un modèle candidat ;
+* monitoring, comparaison modèle et traçabilité selon le pipeline exécuté.
+
+Les principales familles de variables utilisées sont :
+
+* amplitudes sismiques ;
+* énergie dans différentes bandes de fréquences ;
+* indice fréquentiel ;
+* entropie ;
+* kurtosis ;
+* statistiques glissantes ;
+* indicateurs agrégés par station et par canal.
 
 ## Modélisation
 
-Le modèle retenu combine :
+Plusieurs approches de modélisation ont été explorées pour apprendre les dynamiques temporelles des signaux sismiques.
 
-- des couches convolutionnelles pour extraire des motifs locaux ;
-- un encodeur Transformer pour apprendre les dépendances temporelles ;
-- une tête de classification produisant les probabilités des six classes.
+Le modèle opérationnel retenu est un CNN-Transformer de classification. Il combine :
 
-Les classes 0 à 2 représentent les périodes calmes ou pré-éruptives éloignées. Les probabilités des classes 3 à 5 sont agrégées pour calculer l'alerte à 24 heures.
+* des couches convolutionnelles pour extraire des motifs locaux dans les séquences ;
+* un encodeur Transformer pour modéliser les dépendances temporelles ;
+* une couche de classification pour produire les probabilités associées aux 6 classes d’alerte.
+
+La règle d’alerte utilisée est la suivante :
+
+p_alert_24h = P(classe 3) + P(classe 4) + P(classe 5)
+
+Une alerte est déclenchée lorsque cette probabilité dépasse le seuil défini dans la configuration du projet.
 
 ## Architecture MLOps
 
-Deux DAGs Airflow structurent la chaîne :
+Le projet intègre une architecture MLOps destinée à fiabiliser l’exécution des traitements et le suivi du modèle.
 
-- [`volcano_inference_pipeline`](infra/airflow/dags/volcano_inference_pipeline.py) orchestre le preprocessing, la préparation du dernier batch, la validation Great Expectations, l'inférence, les vérifications de sortie, le rapport Evidently et le logging MLflow ;
-- [`volcano_retraining_pipeline`](infra/airflow/dags/volcano_retraining_pipeline.py) orchestre la préparation et la validation du dataset, l'entraînement d'un candidat, sa comparaison au champion, sa promotion conditionnelle ou son rejet, l'archivage et la traçabilité MLflow.
+Les principales briques sont :
 
-MLflow sert de référentiel de suivi et d'audit. La décision de promotion ou de rejet reste pilotée par Airflow et les scripts du projet ; elle n'est pas déléguée à un Model Registry entièrement automatisé.
+* Airflow pour l’orchestration des pipelines ;
+* MLflow pour le suivi des expérimentations, des entraînements candidats, des métriques, des artefacts modèle et des décisions de comparaison champion/candidat ;
+* Great Expectations pour la validation des données d’entrée ;
+* Evidently pour la génération de rapports de monitoring et l’analyse de dérive ;
+* S3 pour le stockage des sorties opérationnelles légères utilisées par le dashboard ;
+* GitHub Actions pour l’exécution des tests en intégration continue ;
+* Streamlit pour la visualisation des prédictions et de l’historique d’alerte.
 
-Great Expectations applique des contrôles bloquants avant l'inférence et avant le réentraînement. Evidently génère les rapports utilisés pour examiner les écarts entre données de référence et données récentes.
+L’architecture est organisée autour de deux DAGs Airflow opérationnels :
 
-## Dashboard externe
+* `volcano_inference_pipeline` : pipeline d’inférence, depuis le preprocessing des CSV agrégés jusqu’à l’écriture des prédictions et rapports légers dans S3 ;
+* `volcano_retraining_pipeline` : pipeline de réentraînement conditionnel, depuis le preprocessing training jusqu’à la décision de promotion ou de rejet d’un modèle candidat.
 
-Un dashboard Streamlit permet de consulter la dernière prédiction, la classe estimée, la probabilité d'alerte à 24 heures, le seuil utilisé et l'historique des prédictions :
+MLflow joue un rôle central dans la traçabilité du cycle modèle. Il permet de conserver l’historique des entraînements, les métriques de performance, les paramètres, les artefacts associés aux modèles et les décisions prises lors de la comparaison entre le modèle champion et un modèle candidat.
 
-<https://vartkirl-vulcadata-dashboard.hf.space/>
+Dans la version actuelle, la décision opérationnelle de promotion ou de rejet reste orchestrée par Airflow et les scripts du projet. MLflow sert de référentiel de suivi et d’audit : il permet de justifier a posteriori pourquoi un candidat a été accepté, rejeté ou simplement archivé.
 
-Le dashboard est déployé séparément sur Hugging Face Spaces. **Son code Streamlit n'est pas versionné dans ce dépôt** 
+Great Expectations est utilisé comme contrôle qualité bloquant à deux niveaux :
 
-## Structure du dépôt
+* sur le dernier batch d’inférence, afin de vérifier la conformité du tenseur utilisé par le modèle opérationnel ;
+* sur le dataset de réentraînement, afin de vérifier les clés NPZ attendues, les dimensions des splits, l’absence de valeurs non finies et la validité des labels avant fusion et entraînement.
 
-- `configs/` : configurations du modèle, de l'inférence et de l'entraînement ;
-- `src/` : extraction, preprocessing, inférence, retraining et monitoring ;
-- `infra/airflow/` : DAGs et environnement d'orchestration ;
-- `scripts/` : entraînement, préparation des décisions modèle et utilitaires MLflow ;
-- `tests/` : tests unitaires et tests de contrat ;
-- `reports/` : rapports et artefacts de présentation versionnés ;
-- `data/` : métadonnées versionnées et données locales ignorées par Git.
+Ainsi, un dataset invalide bloque le pipeline avant l’inférence ou avant le réentraînement.
 
-## Exécution
+Evidently complète cette supervision en produisant des rapports de monitoring permettant d’identifier d’éventuels écarts entre les données de référence et les données récentes. Ces rapports alimentent l’analyse de dérive et peuvent contribuer à la décision de maintenir, rejeter ou réentraîner un modèle.
 
-### 1. Extraire et préparer les signaux
+## Dashboard
+
+Un dashboard Streamlit permet de consulter les résultats d’inférence.
+
+Il présente notamment :
+
+* la dernière prédiction disponible ;
+* la classe prédite ;
+* la probabilité d’alerte à 24 heures ;
+* le seuil d’alerte utilisé ;
+* l’historique des prédictions ;
+* l’évolution du niveau d’alerte dans le temps.
+
+Dashboard :
+
+https://vartkirl-vulcadata-dashboard.hf.space/
+
+## Structure du projet
+
+Le dépôt est organisé autour des principaux dossiers suivants :
+
+* `configs/` : fichiers de configuration du projet ;
+* `src/` : code source principal ;
+* `infra/airflow/` : DAGs Airflow et configuration d’orchestration ;
+* `infra/huggingface_spaces/streamlit` : application Streamlit ;
+* `tests/` : tests unitaires et tests de contrat ;
+* `reports/` : rapports générés localement ;
+* `data/` : données locales ignorées par Git.
+
+## Exécution des pipelines
+
+Les pipelines s’appuient sur un fichier CSV décrivant les périodes sismiques à traiter :
+
+`data/metadata/extraction_periods.csv`
+
+Colonnes attendues :
+
+`period_id;period_type;period_start_utc;period_end_utc;eruption_start_utc;eruption_end_utc;split;network;stations;channels`
+
+Exemple :
+
+`eruption_2019_08_15;eruption;2019-08-13T00:00:00Z;2019-08-16T00:00:00Z;2019-08-15T04:25:00Z;;;PF;CSS,DSO,ENO,FJS,HIM,SNE;HHZ,EHZ,HHE,HHN`
+
+Le séparateur ; est recommandé sous Windows/Excel en configuration française. Les colonnes stations et channels peuvent contenir plusieurs valeurs séparées par des virgules.
+
+Valeurs principales de `period_type` :
+
+* `eruption` : période associée à une éruption connue ;
+* `quiet` : période calme utilisée comme référence non éruptive ;
+* `inference` : période destinée uniquement à l’inférence.
+
+**Étape 1 — Extraction manuelle des données**
 
 Depuis la racine du projet :
 
-```powershell
+```
 python -m src.extraction.extract_volcano_periods --periods data\metadata\extraction_periods.csv --output-dir data\extraction
 ```
 
-Le fichier de périodes utilise les colonnes suivantes :
+Cette commande récupère les données MiniSEED, applique les traitements signal définis dans le script d’extraction et produit les CSV agrégés dans :
 
-```text
-period_id;period_type;period_start_utc;period_end_utc;eruption_start_utc;eruption_end_utc;split;network;stations;channels
+`data/extraction/processed_csv/`
+
+**Étape 2 — Pipeline d’inférence**
+
+À partir des CSV agrégés, Airflow prend le relais avec le DAG :
+
+`volcano_inference_pipeline`
+
+Ce DAG orchestre le preprocessing inference, la création du batch d’inférence, la validation Great Expectations, l’inférence, l’écriture des sorties opérationnelles, le monitoring Evidently et le logging MLflow.
+
+Depuis le dossier Airflow :
+
+`cd infra\airflow`
+
+Lancer le DAG d’inférence :
+
 ```
-
-Les principales valeurs de `period_type` sont `eruption`, `quiet` et `inference`.
-
-### 2. Déclencher l'inférence
-
-Depuis `infra/airflow/` :
-
-```powershell
 docker compose exec airflow-scheduler airflow dags trigger volcano_inference_pipeline
 ```
 
-### 3. Déclencher le réentraînement
+**Étape 3 — Pipeline de réentraînement**
 
-Depuis `infra/airflow/` :
+À partir des CSV agrégés, Airflow peut également lancer le DAG :
 
-```powershell
-docker compose exec airflow-scheduler airflow dags trigger volcano_retraining_pipeline
-```
+`volcano_retraining_pipeline`
 
-Une décision `reject_candidate` signifie que le candidat a été entraîné et évalué, mais qu'il ne satisfait pas les règles de promotion. Ce résultat n'est pas une erreur du pipeline.
+Ce DAG orchestre le preprocessing training, la validation Great Expectations du dataset de réentraînement, la fusion avec le dataset de référence, l’entraînement candidat, le rapport Evidently, la comparaison au champion, la décision de promotion ou de rejet, l’archivage et le logging MLflow.
+
+Depuis le dossier Airflow :
+
+`cd infra\airflow`
+
+Lancer le DAG de réentraînement :
+
+```docker compose exec airflow-scheduler airflow dags trigger volcano_retraining_pipeline```
+
+Une décision `reject_candidate` n’est pas une erreur pipeline. Elle signifie que le candidat a bien été entraîné et évalué, mais qu’il ne respecte pas les règles de promotion définies par le projet.
 
 ## Tests
 
-```powershell
-python -m pytest tests -v
-```
+Les tests principaux peuvent être exécutés avec :
 
-La suite couvre notamment les contrats de configuration, le chargement du modèle, l'inférence, les écritures S3 simulées, les validations Great Expectations et la topologie du DAG de réentraînement. Certains tests de rapports d'exécution sont ignorés si les artefacts correspondants n'ont pas encore été générés ; une suite verte ne prouve donc pas à elle seule l'exécution complète des services externes.
+`python -m pytest tests -v`
 
-## Roadmap — non implémentée
+À l’état actuel du projet, la suite de tests principale valide notamment :
 
-Les éléments ci-dessous sont des pistes d'évolution, pas des fonctionnalités livrées dans l'état actuel du dépôt :
+* les contrats de configuration ;
+* le chargement du modèle opérationnel ;
+* les fonctions d’inférence ;
+* les écritures S3 simulées ;
+* la validation Great Expectations du batch d’inférence ;
+* la validation Great Expectations du dataset de réentraînement ;
+* les contrats des rapports produits par les pipelines ;
+* la topologie du DAG de réentraînement.
 
-- automatiser la collecte récente et la labellisation des nouvelles périodes ;
-- renforcer la gestion formelle champion/challenger avec MLflow Model Registry ;
-- intégrer des données GPS, de gaz volcaniques ou d'imagerie satellite thermique ;
-- élargir l'historique d'apprentissage et tester la généralisation à d'autres volcans ;
-- évaluer une architecture data warehouse ou lakehouse ;
-- étudier le calcul distribué sur un historique plus large.
+Le projet est également testé via GitHub Actions à chaque mise à jour du dépôt.
 
-Les travaux envisagés autour de Kubernetes, Helm, Ray/KubeRay ou d'une migration NPZ vers Parquet ne sont pas présents dans cette version et ne sont pas revendiqués comme réalisés.
+## Limites et évolutions possibles
+
+Plusieurs évolutions peuvent renforcer le projet :
+
+* automatiser la collecte des données sismiques récentes depuis l’observatoire ;
+* automatiser ou semi-automatiser la labellisation des nouvelles périodes utilisables pour le réentraînement ;
+* renforcer l’usage de MLflow Model Registry pour gérer formellement les versions champion/challenger, les promotions, les rejets et les rollbacks ;
+* intégrer des sources complémentaires comme les données GPS, les gaz volcaniques ou l’imagerie satellite thermique ;
+* élargir la période historique d’apprentissage ;
+* tester la généralisation sur d’autres volcans actifs ;
+* envisager une architecture data warehouse ou lakehouse pour historiser les données, structurer les features et faciliter les traitements à plus grande échelle ;
+* envisager du calcul distribué pour les transformations massives et l’entraînement sur un historique élargi.
+
 
 ## Conclusion
 
-VulcaData illustre une chaîne Data Science et MLOps complète sur un cas géophysique réel : préparation de signaux sismiques, modélisation temporelle, décision métier, orchestration, qualité des données, monitoring et traçabilité.
+VulcaData démontre la mise en place d’une chaîne MLOps de prédiction appliquée à un cas géophysique réel : préparation de données sismiques, transformation en features temporelles, entraînement de modèles de Deep Learning, inférence, orchestration, validation, monitoring et restitution des résultats dans un dashboard.
 
-Sa principale force est la traduction d'un modèle multiclasse imparfait en un objectif d'alerte à 24 heures mesurable et plus pertinent pour le cas d'usage. Sa principale limite reste la performance faible sur la classification fine des six classes, ainsi que la collecte MiniSEED encore manuelle.
+Le projet assume une limite de périmètre : l’extraction des données MiniSEED reste lancée manuellement. En revanche, les étapes de preprocessing, validation, inférence, réentraînement, monitoring et gouvernance modèle sont orchestrées dans Airflow.
