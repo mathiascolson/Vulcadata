@@ -159,7 +159,6 @@ Le dépôt est organisé autour des principaux dossiers suivants :
 * `configs/` : fichiers de configuration du projet ;
 * `src/` : code source principal ;
 * `infra/airflow/` : DAGs Airflow et configuration d’orchestration ;
-* `infra/huggingface_spaces/streamlit` : application Streamlit ;
 * `tests/` : tests unitaires et tests de contrat ;
 * `reports/` : rapports générés localement ;
 * `data/` : données locales ignorées par Git.
