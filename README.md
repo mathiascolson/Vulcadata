@@ -93,7 +93,7 @@ Un dashboard Streamlit permet de consulter la dernière prédiction, la classe e
 
 <https://vartkirl-vulcadata-dashboard.hf.space/>
 
-Le dashboard est déployé séparément sur Hugging Face Spaces. **Son code Streamlit n'est pas versionné dans ce dépôt** ; le chemin `infra/huggingface_spaces/streamlit` précédemment indiqué dans le README n'existe pas dans l'arborescence actuelle.
+Le dashboard est déployé séparément sur Hugging Face Spaces. **Son code Streamlit n'est pas versionné dans ce dépôt** 
 
 ## Structure du dépôt
 
